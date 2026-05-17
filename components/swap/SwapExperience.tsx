@@ -140,6 +140,7 @@ async function ensureArcTestnet(provider: NonNullable<typeof window.ethereum>) {
 }
 
 export function SwapExperience() {
+  const PAGE_SIZE = 6;
   const { address, connected, loading: walletLoading, connect } = useWallet();
   const walletAddress = connected ? address : null;
   const [fromToken, setFromToken] = useState<SwapTokenSymbol>('USDC');
@@ -153,8 +154,15 @@ export function SwapExperience() {
   const [busy, setBusy] = useState(false);
   const [txProgress, setTxProgress] = useState<TxProgress | null>(null);
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalTransactions, setTotalTransactions] = useState(0);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyError, setHistoryError] = useState<string | null>(null);
   const pollingRef = useRef<number | null>(null);
 
+  const totalPages = Math.max(Math.ceil(totalTransactions / PAGE_SIZE), 1);
+  const canGoPreviousPage = currentPage > 1;
+  const canGoNextPage = currentPage < totalPages;
   const slippageBps = useMemo(() => Math.round(Number(slippage || '0') * 100), [slippage]);
   const canRequestQuote = Boolean(walletAddress) && Boolean(amount) && fromToken !== toToken && Boolean(PUBLIC_ARC_KIT_KEY);
   const canSubmit = canRequestQuote && !quote.error && !busy;
@@ -202,10 +210,12 @@ export function SwapExperience() {
   useEffect(() => {
     if (!walletAddress) {
       setHistory([]);
+      setCurrentPage(1);
+      setTotalTransactions(0);
       return;
     }
 
-    void loadHistory(walletAddress);
+    void loadHistory(walletAddress, 1);
   }, [walletAddress]);
 
   useEffect(() => {
@@ -282,24 +292,41 @@ export function SwapExperience() {
     });
   }
 
-  async function loadHistory(address: string) {
-    const response = await fetch(`/api/history/list?address=${address}&type=swap&limit=6`, { cache: 'no-store' });
-    const rawBody = await response.text();
-    let data: { history?: HistoryItem[]; error?: string } = {};
+  async function loadHistory(address: string, page: number = 1) {
+    setHistoryLoading(true);
+    setHistoryError(null);
+    const offset = (page - 1) * PAGE_SIZE;
+    
+    try {
+      const response = await fetch(
+        `/api/history/list?address=${encodeURIComponent(address)}&type=swap&limit=${PAGE_SIZE}&offset=${offset}`,
+        { cache: 'no-store' }
+      );
+      const rawBody = await response.text();
+      let data: { data?: { transactions?: HistoryItem[]; total?: number }; error?: string } = {};
 
-    if (rawBody) {
-      try {
-        data = JSON.parse(rawBody) as { history?: HistoryItem[]; error?: string };
-      } catch {
-        data = { error: 'Invalid server response.' };
+      if (rawBody) {
+        try {
+          data = JSON.parse(rawBody) as { data?: { transactions?: HistoryItem[]; total?: number }; error?: string };
+        } catch {
+          data = { error: 'Invalid server response.' };
+        }
       }
-    }
 
-    if (!response.ok) {
-      throw new Error(data.error || 'Unable to load swap history.');
-    }
+      if (!response.ok) {
+        throw new Error(data.error || 'Unable to load swap history.');
+      }
 
-    setHistory(data.history ?? []);
+      setHistory(data.data?.transactions ?? []);
+      setTotalTransactions(data.data?.total ?? 0);
+      setCurrentPage(page);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to load history';
+      setHistoryError(message);
+      console.error('Swap history error:', error);
+    } finally {
+      setHistoryLoading(false);
+    }
   }
 
   async function pollTransaction(hash: string, explorerUrl: string | null) {
@@ -334,7 +361,7 @@ export function SwapExperience() {
     }
 
     if (walletAddress) {
-      await loadHistory(walletAddress);
+      await loadHistory(walletAddress, currentPage);
     }
   }
 
@@ -408,6 +435,20 @@ export function SwapExperience() {
       setBusy(false);
     }
   }
+
+  const handleHistoryPreviousPage = () => {
+    if (!canGoPreviousPage || historyLoading) return;
+    if (walletAddress) {
+      void loadHistory(walletAddress, currentPage - 1);
+    }
+  };
+
+  const handleHistoryNextPage = () => {
+    if (!canGoNextPage || historyLoading) return;
+    if (walletAddress) {
+      void loadHistory(walletAddress, currentPage + 1);
+    }
+  };
 
   return (
     <main className={styles.pageShell}>
@@ -593,37 +634,87 @@ export function SwapExperience() {
             </div>
 
             {walletAddress ? (
-              history.length > 0 ? (
-                <div className={styles.historyList}>
-                  {history.map((item) => (
-                    <article key={item.hash} className={styles.historyItem}>
-                      <div className={styles.historyTopRow}>
-                        <strong>
-                          {item.tokenIn} {'\u2192'} {item.tokenOut}
-                        </strong>
-                        <span className={item.status === 'success' ? styles.statusSuccess : item.status === 'failed' ? styles.statusFailed : styles.statusPending}>
-                          {statusLabel(item.status)}
-                        </span>
+              <>
+                {historyLoading ? (
+                  <div className={styles.historyList}>
+                    <p className={styles.noticeText}>Loading transactions...</p>
+                  </div>
+                ) : historyError ? (
+                  <p className={styles.noticeText}>{historyError}</p>
+                ) : history.length > 0 ? (
+                  <>
+                    <div className={styles.historyList}>
+                      <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.5rem', paddingLeft: '0.5rem' }}>
+                        {totalTransactions} transaction(s)
                       </div>
-                      <p>
-                        {item.amountIn ?? item.amount} {item.tokenIn} → {item.amountOut ?? '--'} {item.tokenOut}
-                      </p>
-                      <div className={styles.historyMeta}>
-                        <span>{new Date(item.createdAt).toLocaleString('en-US')}</span>
-                        {item.explorerUrl ? (
-                          <a href={item.explorerUrl} target="_blank" rel="noreferrer">
-                            {shortenAddress(item.hash, 6)}
-                          </a>
-                        ) : (
-                          <span>{shortenAddress(item.hash, 6)}</span>
-                        )}
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              ) : (
-                <p className={styles.noticeText}>No swap records in the database for this wallet yet.</p>
-              )
+                      {history.map((item) => (
+                        <article key={item.hash} className={styles.historyItem}>
+                          <div className={styles.historyTopRow}>
+                            <strong>
+                              {item.tokenIn} {'\u2192'} {item.tokenOut}
+                            </strong>
+                            <span className={item.status === 'success' ? styles.statusSuccess : item.status === 'failed' ? styles.statusFailed : styles.statusPending}>
+                              {statusLabel(item.status)}
+                            </span>
+                          </div>
+                          <p>
+                            {item.amountIn ?? item.amount} {item.tokenIn} → {item.amountOut ?? '--'} {item.tokenOut}
+                          </p>
+                          <div className={styles.historyMeta}>
+                            <span>{new Date(item.createdAt).toLocaleString('en-US')}</span>
+                            {item.explorerUrl ? (
+                              <a href={item.explorerUrl} target="_blank" rel="noreferrer">
+                                {shortenAddress(item.hash, 6)}
+                              </a>
+                            ) : (
+                              <span>{shortenAddress(item.hash, 6)}</span>
+                            )}
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '0.75rem', borderTop: '1px solid #e5e7eb', marginTop: '0.75rem' }}>
+                      <button
+                        onClick={handleHistoryPreviousPage}
+                        disabled={!canGoPreviousPage || historyLoading}
+                        style={{
+                          padding: '0.375rem 0.75rem',
+                          fontSize: '0.875rem',
+                          borderRadius: '0.375rem',
+                          border: '1px solid #d1d5db',
+                          color: '#374151',
+                          backgroundColor: '#fff',
+                          cursor: !canGoPreviousPage || historyLoading ? 'not-allowed' : 'pointer',
+                          opacity: !canGoPreviousPage || historyLoading ? 0.5 : 1,
+                        }}
+                      >
+                        Previous
+                      </button>
+                      <span style={{ fontSize: '0.75rem', color: '#4b5563' }}>
+                        Page {Math.min(currentPage, totalPages)} / {totalPages}
+                      </span>
+                      <button
+                        onClick={handleHistoryNextPage}
+                        disabled={!canGoNextPage || historyLoading}
+                        style={{
+                          padding: '0.375rem 0.75rem',
+                          fontSize: '0.875rem',
+                          borderRadius: '0.375rem',
+                          border: '1px solid #d1d5db',
+                          color: '#374151',
+                          backgroundColor: '#fff',
+                          cursor: !canGoNextPage || historyLoading ? 'not-allowed' : 'pointer',
+                          opacity: !canGoNextPage || historyLoading ? 0.5 : 1,
+                        }}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <p className={styles.noticeText}>No swap records in the database for this wallet yet.</p>
+                )}
+              </>
             ) : (
               <p className={styles.noticeText}>Connect your wallet to load swap history from the backend.</p>
             )}

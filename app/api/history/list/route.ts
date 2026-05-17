@@ -27,7 +27,10 @@ export async function GET(req: NextRequest) {
   const address = searchParams.get('address');
   const txType = searchParams.get('type');
   const limitParam = Number(searchParams.get('limit') ?? '10');
+  const offsetParam = Number(searchParams.get('offset') ?? '0');
+  
   const limit = Number.isFinite(limitParam) ? Math.min(Math.max(limitParam, 1), 50) : 10;
+  const offset = Number.isFinite(offsetParam) && offsetParam >= 0 ? offsetParam : 0;
 
   if (!address) {
     return NextResponse.json({ error: 'Wallet address is required' }, { status: 400 });
@@ -35,6 +38,15 @@ export async function GET(req: NextRequest) {
 
   try {
     const normalizedAddress = normalizeAddress(address);
+    
+    // Get total count
+    const total = await prisma.transaction.count({
+      where: {
+        from: normalizedAddress,
+        ...(txType && txType !== 'all' ? { txType } : {}),
+      },
+    });
+
     const transactions = await prisma.transaction.findMany({
       where: {
         from: normalizedAddress,
@@ -42,34 +54,41 @@ export async function GET(req: NextRequest) {
       },
       orderBy: { createdAt: 'desc' },
       take: limit,
+      skip: offset,
     });
 
     return NextResponse.json({
-      history: transactions.map((transaction) => ({
-        id: Number(transaction.id),
-        hash: transaction.hash,
-        txType: transaction.txType,
-        from: transaction.from,
-        to: transaction.to,
-        amount: transaction.amount,
-        amountIn: transaction.amountIn,
-        amountOut: transaction.amountOut,
-        tokenIn: transaction.tokenIn,
-        tokenOut: transaction.tokenOut,
-        chainId: transaction.chainId,
-        status: transaction.status,
-        explorerUrl: transaction.explorerUrl,
-        errorMessage: transaction.errorMessage,
-        createdAt: transaction.createdAt.toISOString(),
-        updatedAt: transaction.updatedAt.toISOString(),
-      })),
+      data: {
+        transactions: transactions.map((transaction) => ({
+          id: Number(transaction.id),
+          hash: transaction.hash,
+          txType: transaction.txType,
+          from: transaction.from,
+          to: transaction.to,
+          amount: transaction.amount,
+          amountIn: transaction.amountIn,
+          amountOut: transaction.amountOut,
+          tokenIn: transaction.tokenIn,
+          tokenOut: transaction.tokenOut,
+          chainId: transaction.chainId,
+          status: transaction.status,
+          explorerUrl: transaction.explorerUrl,
+          errorMessage: transaction.errorMessage,
+          createdAt: transaction.createdAt.toISOString(),
+          updatedAt: transaction.updatedAt.toISOString(),
+        })),
+        total,
+      },
     });
   } catch (error) {
     if (isDatabaseUnavailableError(error)) {
       return NextResponse.json(
         {
           error: 'Unable to connect to the history database right now. Please try again later.',
-          history: [],
+          data: {
+            transactions: [],
+            total: 0,
+          },
         },
         { status: 503 }
       );
@@ -78,7 +97,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         error: 'An error occurred while loading transaction history.',
-        history: [],
+        data: {
+          transactions: [],
+          total: 0,
+        },
       },
       { status: 500 }
     );
