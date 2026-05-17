@@ -1,4 +1,4 @@
-// API route: Ghi nhận TX sau khi ký
+// API route: Record transaction after signing
 import { NextRequest, NextResponse } from 'next/server';
 import { arcProvider } from '@/lib/arc/client';
 

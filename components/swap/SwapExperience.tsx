@@ -3,6 +3,7 @@
 import { AppKit } from '@circle-fin/app-kit';
 import { createViemAdapterFromProvider } from '@circle-fin/adapter-viem-v2';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useWallet } from '@/hooks/useWallet';
 import {
   ARC_RPC_URL,
   ARC_SWAP_TOKENS,
@@ -64,7 +65,7 @@ function formatAmount(value: string | number | null | undefined, maximumFraction
     return '--';
   }
 
-  return new Intl.NumberFormat('vi-VN', {
+  return new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 0,
     maximumFractionDigits,
   }).format(numeric);
@@ -72,16 +73,16 @@ function formatAmount(value: string | number | null | undefined, maximumFraction
 
 function summarizeError(error: unknown) {
   if (!(error instanceof Error)) {
-    return 'Khong the xu ly yeu cau Swap.';
+    return 'Unable to process the swap request.';
   }
 
-  const message = error.message || 'Khong the xu ly yeu cau Swap.';
+  const message = error.message || 'Unable to process the swap request.';
   if (/user rejected|user denied|rejected the request/i.test(message)) {
-    return 'Nguoi dung da huy thao tac trong vi.';
+    return 'The wallet action was canceled by the user.';
   }
 
   if (/Stablecoin Service createSwap failed: Maximum retry attempts \(3\) exceeded: Failed to fetch/i.test(message)) {
-    return 'Khong the ket noi Stablecoin Service tu trinh duyet. He thong da ap dung workaround CORS, vui long thu lai.';
+    return 'Unable to reach Stablecoin Service from the browser. A CORS workaround is already applied, please try again.';
   }
 
   return message;
@@ -90,13 +91,13 @@ function summarizeError(error: unknown) {
 function statusLabel(status: string) {
   switch (status) {
     case 'pending':
-      return 'Dang gui';
+      return 'Submitting';
     case 'confirming':
-      return 'Dang xac nhan';
+      return 'Confirming';
     case 'success':
-      return 'Thanh cong';
+      return 'Success';
     case 'failed':
-      return 'That bai';
+      return 'Failed';
     default:
       return status;
   }
@@ -139,8 +140,8 @@ async function ensureArcTestnet(provider: NonNullable<typeof window.ethereum>) {
 }
 
 export function SwapExperience() {
-  const [walletAddress, setWalletAddress] = useState<string | null>(null);
-  const [chainId, setChainId] = useState<number | null>(null);
+  const { address, connected, loading: walletLoading, connect } = useWallet();
+  const walletAddress = connected ? address : null;
   const [fromToken, setFromToken] = useState<SwapTokenSymbol>('USDC');
   const [toToken, setToToken] = useState<SwapTokenSymbol>('EURC');
   const [amount, setAmount] = useState('1.00');
@@ -148,7 +149,6 @@ export function SwapExperience() {
   const [quote, setQuote] = useState<QuoteState>({ estimatedOutput: '0', minimumReceived: '0', fees: [], error: null });
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [walletError, setWalletError] = useState<string | null>(null);
   const [swapError, setSwapError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [txProgress, setTxProgress] = useState<TxProgress | null>(null);
@@ -200,41 +200,6 @@ export function SwapExperience() {
   }, []);
 
   useEffect(() => {
-    const provider = window.ethereum as any;
-    if (!provider) {
-      return;
-    }
-
-    const handleAccountsChanged = (accounts: unknown) => {
-      const nextAddress = Array.isArray(accounts) && typeof accounts[0] === 'string' ? accounts[0] : null;
-      setWalletAddress(nextAddress);
-    };
-
-    const handleChainChanged = (nextChainId: unknown) => {
-      if (typeof nextChainId === 'string') {
-        setChainId(Number.parseInt(nextChainId, 16));
-      }
-    };
-
-    provider.on?.('accountsChanged', handleAccountsChanged);
-    provider.on?.('chainChanged', handleChainChanged);
-
-    void provider
-      .request({ method: 'eth_accounts' })
-      .then((accounts: unknown) => handleAccountsChanged(accounts))
-      .catch(() => undefined);
-    void provider
-      .request({ method: 'eth_chainId' })
-      .then((nextChainId: unknown) => handleChainChanged(nextChainId))
-      .catch(() => undefined);
-
-    return () => {
-      provider.removeListener?.('accountsChanged', handleAccountsChanged);
-      provider.removeListener?.('chainChanged', handleChainChanged);
-    };
-  }, []);
-
-  useEffect(() => {
     if (!walletAddress) {
       setHistory([]);
       return;
@@ -245,7 +210,7 @@ export function SwapExperience() {
 
   useEffect(() => {
     if (!walletAddress || !canRequestQuote) {
-      setQuote((current) => ({ ...current, error: !PUBLIC_ARC_KIT_KEY ? 'Thieu NEXT_PUBLIC_ARC_KIT_KEY de goi Arc App Kit.' : null }));
+      setQuote((current) => ({ ...current, error: !PUBLIC_ARC_KIT_KEY ? 'Missing NEXT_PUBLIC_ARC_KIT_KEY to call Arc App Kit.' : null }));
       return;
     }
 
@@ -286,7 +251,7 @@ export function SwapExperience() {
   async function buildAdapter() {
     const provider = window.ethereum as any;
     if (!provider) {
-      throw new Error('Khong tim thay vi EVM trong trinh duyet.');
+      throw new Error('No EVM wallet detected in the browser.');
     }
 
     // Enforce Arc Testnet before App Kit actions to avoid viem switch errors
@@ -294,29 +259,6 @@ export function SwapExperience() {
     await ensureArcTestnet(provider);
 
     return createViemAdapterFromProvider({ provider });
-  }
-
-  async function connectWallet() {
-    setWalletError(null);
-
-    try {
-      const provider = window.ethereum as any;
-      if (!provider) {
-        throw new Error('Khong tim thay MetaMask hoac vi EVM tuong thich.');
-      }
-
-      await ensureArcTestnet(provider);
-      const accounts = (await provider.request({ method: 'eth_requestAccounts' })) as string[];
-      const address = accounts?.[0];
-      if (!address) {
-        throw new Error('Khong co tai khoan nao duoc chon trong vi.');
-      }
-
-      setWalletAddress(address);
-      setChainId(ARC_TESTNET_CHAIN_ID);
-    } catch (error) {
-      setWalletError(summarizeError(error));
-    }
   }
 
   async function estimateLiveQuote() {
@@ -349,12 +291,12 @@ export function SwapExperience() {
       try {
         data = JSON.parse(rawBody) as { history?: HistoryItem[]; error?: string };
       } catch {
-        data = { error: 'Phan hoi may chu khong hop le.' };
+        data = { error: 'Invalid server response.' };
       }
     }
 
     if (!response.ok) {
-      throw new Error(data.error || 'Khong the tai lich su swap.');
+      throw new Error(data.error || 'Unable to load swap history.');
     }
 
     setHistory(data.history ?? []);
@@ -369,7 +311,7 @@ export function SwapExperience() {
     };
 
     if (!response.ok) {
-      throw new Error(data.errorMessage || 'Khong the kiem tra trang thai giao dich.');
+      throw new Error(data.errorMessage || 'Unable to check transaction status.');
     }
 
     const phase = (data.status as TxProgress['phase']) ?? 'pending';
@@ -437,7 +379,7 @@ export function SwapExperience() {
         hash: result.txHash,
         phase: 'pending',
         explorerUrl,
-        submittedAt: new Date().toLocaleTimeString('vi-VN', {
+        submittedAt: new Date().toLocaleTimeString('en-US', {
           hour: '2-digit',
           minute: '2-digit',
           second: '2-digit',
@@ -472,45 +414,8 @@ export function SwapExperience() {
       <section className={styles.heroPanel}>
         <div className={styles.heroCopy}>
           <span className={styles.badge}>Arc Swap Integration</span>
-          <h1>Swap that voi browser wallet, quote live va polling chain thuc.</h1>
-          <p>
-            Luong nay dung Arc App Kit de estimate va execute swap tren Arc Testnet, sau do ghi transaction vao database va dong bo history qua API backend.
-          </p>
-          <div className={styles.heroActions}>
-            {walletAddress ? (
-              <div className={styles.walletChip}>
-                <span className={styles.walletDot} />
-                {shortenAddress(walletAddress)}
-              </div>
-            ) : (
-              <button type="button" className={styles.primaryButton} onClick={connectWallet}>
-                Ket noi MetaMask
-              </button>
-            )}
-            <div className={styles.networkPill}>
-              {chainId === ARC_TESTNET_CHAIN_ID ? 'Arc Testnet ready' : 'Can switch sang Arc Testnet'}
-            </div>
-          </div>
-          {walletError ? <p className={styles.errorText}>{walletError}</p> : null}
-          {!PUBLIC_ARC_KIT_KEY ? <p className={styles.warningText}>Can cau hinh NEXT_PUBLIC_ARC_KIT_KEY de Arc App Kit co the tao quote va swap.</p> : null}
-        </div>
-
-        <div className={styles.metricGrid}>
-          <article className={styles.metricCard}>
-            <span>Estimate source</span>
-            <strong>Arc App Kit</strong>
-            <p>Quote lay truc tiep tu Arc Stablecoin Service thong qua estimateSwap.</p>
-          </article>
-          <article className={styles.metricCard}>
-            <span>Execution</span>
-            <strong>Browser wallet</strong>
-            <p>Giao dich duoc ky va gui bang vi EVM that thay vi mock local.</p>
-          </article>
-          <article className={styles.metricCard}>
-            <span>Persistence</span>
-            <strong>Prisma + RPC</strong>
-            <p>Transaction duoc luu database va poll lai receipt that tu chain qua API status.</p>
-          </article>
+          <p>Real swaps with browser wallets, live quotes, and on-chain polling.</p>
+          {!PUBLIC_ARC_KIT_KEY ? <p className={styles.warningText}>Configure NEXT_PUBLIC_ARC_KIT_KEY so Arc App Kit can create quotes and swaps.</p> : null}
         </div>
       </section>
 
@@ -519,14 +424,14 @@ export function SwapExperience() {
           <div className={styles.cardHeader}>
             <div>
               <p className={styles.eyebrow}>Swap form</p>
-              <h2>Thuc thi giao dich</h2>
+              <h2>Execute transaction</h2>
             </div>
             <div className={styles.inlineStat}>{amount || '0'} {fromToken}</div>
           </div>
 
           <div className={styles.tokenPanel}>
             <div className={styles.fieldRow}>
-              <label htmlFor="from-token">Token nguon</label>
+              <label htmlFor="from-token">From token</label>
               <span>{TOKEN_META[fromToken].name}</span>
             </div>
             <div className={styles.inputGroup}>
@@ -559,19 +464,20 @@ export function SwapExperience() {
             <div className={styles.routeHint}>Route: Arc Stablecoin Service</div>
             <button
               type="button"
-              className={styles.flipButton}
+              className={styles.flipButton} style={{marginTop: '4px'}}
               onClick={() => {
                 setFromToken(toToken);
                 setToToken(fromToken);
               }}
+              title="Flip pair"
             >
-              Dao chieu
+              ⇅ 
             </button>
           </div>
 
           <div className={styles.tokenPanel}>
             <div className={styles.fieldRow}>
-              <label htmlFor="to-token">Token dich</label>
+              <label htmlFor="to-token">To token</label>
               <span>{TOKEN_META[toToken].name}</span>
             </div>
             <div className={styles.inputGroup}>
@@ -588,7 +494,7 @@ export function SwapExperience() {
                 ))}
               </select>
               <div className={styles.outputBox}>
-                {quoteLoading ? 'Dang lay quote...' : `${formatAmount(quote.estimatedOutput)} ${toToken}`}
+                {quoteLoading ? 'Fetching quote...' : `${formatAmount(quote.estimatedOutput)} ${toToken}`}
               </div>
             </div>
           </div>
@@ -623,18 +529,29 @@ export function SwapExperience() {
             />
           </div>
 
-          {fromToken === toToken ? <p className={styles.errorText}>Token nguon va dich phai khac nhau.</p> : null}
+          {fromToken === toToken ? <p className={styles.errorText}>From and to tokens must be different.</p> : null}
           {quote.error ? <p className={styles.errorText}>{quote.error}</p> : null}
           {swapError ? <p className={styles.errorText}>{swapError}</p> : null}
 
-          <button
-            type="button"
-            className={styles.primaryButton}
-            disabled={!canSubmit}
-            onClick={() => setPreviewOpen(true)}
-          >
-            {busy ? 'Dang xu ly...' : 'Preview va ky giao dich'}
-          </button>
+          {!connected ? (
+            <button
+              type="button"
+              className={styles.primaryButton}
+              disabled={walletLoading}
+              onClick={() => void connect()}
+            >
+              {walletLoading ? 'Connecting...' : 'Connect wallet'}
+            </button>
+          ) : (
+            <button
+              type="button"
+              className={styles.primaryButton}
+              disabled={!canSubmit}
+              onClick={() => setPreviewOpen(true)}
+            >
+              {busy ? 'Processing...' : 'Preview and sign transaction'}
+            </button>
+          )}
         </article>
 
         <div className={styles.sideColumn}>
@@ -642,7 +559,7 @@ export function SwapExperience() {
             <div className={styles.cardHeader}>
               <div>
                 <p className={styles.eyebrow}>Live estimate</p>
-                <h2>Chi tiet quote</h2>
+                <h2>Quote details</h2>
               </div>
               <div className={styles.pulseBadge}>{quoteLoading ? 'Syncing' : 'Live'}</div>
             </div>
@@ -671,7 +588,7 @@ export function SwapExperience() {
             <div className={styles.cardHeader}>
               <div>
                 <p className={styles.eyebrow}>Swap history</p>
-                <h2>Lan giao dich gan day</h2>
+                <h2>Recent transactions</h2>
               </div>
             </div>
 
@@ -692,7 +609,7 @@ export function SwapExperience() {
                         {item.amountIn ?? item.amount} {item.tokenIn} → {item.amountOut ?? '--'} {item.tokenOut}
                       </p>
                       <div className={styles.historyMeta}>
-                        <span>{new Date(item.createdAt).toLocaleString('vi-VN')}</span>
+                        <span>{new Date(item.createdAt).toLocaleString('en-US')}</span>
                         {item.explorerUrl ? (
                           <a href={item.explorerUrl} target="_blank" rel="noreferrer">
                             {shortenAddress(item.hash, 6)}
@@ -705,10 +622,10 @@ export function SwapExperience() {
                   ))}
                 </div>
               ) : (
-                <p className={styles.noticeText}>Chua co ban ghi swap nao trong database cho vi nay.</p>
+                <p className={styles.noticeText}>No swap records in the database for this wallet yet.</p>
               )
             ) : (
-              <p className={styles.noticeText}>Ket noi vi de tai lich su swap tu backend.</p>
+              <p className={styles.noticeText}>Connect your wallet to load swap history from the backend.</p>
             )}
           </article>
 
@@ -721,7 +638,7 @@ export function SwapExperience() {
                 </div>
                 <div className={styles.statusBadge}>{txProgress.phase}</div>
               </div>
-              <p className={styles.statusMeta}>TX hash: {shortenAddress(txProgress.hash, 6)} · Luc {txProgress.submittedAt}</p>
+              <p className={styles.statusMeta}>TX hash: {shortenAddress(txProgress.hash, 6)} · At {txProgress.submittedAt}</p>
               <div className={styles.progressBar}>
                 <span
                   style={{
@@ -736,7 +653,7 @@ export function SwapExperience() {
               </div>
               {txProgress.explorerUrl ? (
                 <a className={styles.externalLink} href={txProgress.explorerUrl} target="_blank" rel="noreferrer">
-                  Xem tren Arcscan
+                  View on Arcscan
                 </a>
               ) : null}
               {txProgress.errorMessage ? <p className={styles.errorText}>{txProgress.errorMessage}</p> : null}
@@ -751,20 +668,20 @@ export function SwapExperience() {
             <div className={styles.cardHeader}>
               <div>
                 <p className={styles.eyebrow}>Preview</p>
-                <h2 id="swap-preview-title">Xac nhan quote truoc khi ky</h2>
+                <h2 id="swap-preview-title">Confirm quote before signing</h2>
               </div>
               <button type="button" className={styles.closeButton} onClick={() => setPreviewOpen(false)}>
-                Dong
+                Close
               </button>
             </div>
 
             <div className={styles.previewHero}>
               <div>
-                <span>Ban gui</span>
+                <span>You send</span>
                 <strong>{formatAmount(amount)} {fromToken}</strong>
               </div>
               <div>
-                <span>Ban nhan</span>
+                <span>You receive</span>
                 <strong>{formatAmount(quote.estimatedOutput)} {toToken}</strong>
               </div>
             </div>
@@ -790,10 +707,10 @@ export function SwapExperience() {
 
             <div className={styles.modalActions}>
               <button type="button" className={styles.secondaryButton} onClick={() => setPreviewOpen(false)}>
-                Quay lai
+                Back
               </button>
               <button type="button" className={styles.primaryButton} onClick={() => void handleConfirmSwap()} disabled={busy}>
-                {busy ? 'Dang ky giao dich...' : 'Confirm and sign'}
+                {busy ? 'Submitting transaction...' : 'Confirm and sign'}
               </button>
             </div>
           </div>

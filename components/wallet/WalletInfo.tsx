@@ -1,29 +1,46 @@
 'use client';
 
-import { useWalletStore } from '@/stores/wallet';
+import { useWallet } from '@/hooks/useWallet';
 import { shortenAddress } from '@/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function WalletInfo() {
-  const { address, connected, setAddress, setConnected } = useWalletStore();
+  const { address, connected, loading, error: walletError, connect, disconnect } = useWallet();
   const [balance, setBalance] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
+  const detailsRef = useRef<HTMLDivElement>(null);
+  const activeAddress = connected ? address : null;
 
-  // Fetch balance từ API khi ví được kết nối
+  // Fetch balance from API when the wallet is connected
   useEffect(() => {
-    if (address && connected) {
-      fetchBalance(address);
+    if (activeAddress) {
+      fetchBalance(activeAddress);
       // Refresh balance every 15 seconds
       const interval = setInterval(() => {
-        fetchBalance(address);
+        fetchBalance(activeAddress);
       }, 15000);
       return () => clearInterval(interval);
     } else {
       setBalance(null);
       setError(null);
     }
-  }, [address, connected]);
+  }, [activeAddress]);
+
+  useEffect(() => {
+    if (!showDetails) {
+      return;
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (detailsRef.current && !detailsRef.current.contains(event.target as Node)) {
+        setShowDetails(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showDetails]);
 
   const fetchBalance = async (addr: string) => {
     try {
@@ -44,82 +61,92 @@ export default function WalletInfo() {
   };
 
   const handleConnect = async () => {
-    setLoading(true);
     setError(null);
-    try {
-      // Kiểm tra nếu có MetaMask hoặc wallet provider
-      if (typeof window === 'undefined' || !(window as any).ethereum) {
-        setError('MetaMask or Web3 wallet not found. Please install a wallet extension.');
-        setLoading(false);
-        return;
-      }
-
-      const accounts = await (window as any).ethereum.request({
-        method: 'eth_requestAccounts',
-      });
-      
-      if (!accounts || accounts.length === 0) {
-        setError('No accounts available');
-        setLoading(false);
-        return;
-      }
-
-      setAddress(accounts[0] as any);
-      setConnected(true);
-    } catch (error: any) {
-      console.error('Failed to connect wallet:', error);
-      setError(error.message || 'Failed to connect wallet');
-    } finally {
-      setLoading(false);
-    }
+    await connect();
   };
 
   const handleDisconnect = () => {
-    setAddress(null);
-    setConnected(false);
+    disconnect();
     setBalance(null);
     setError(null);
+    setShowDetails(false);
   };
 
+  const displayError = error ?? walletError;
+  const avatarSeed = activeAddress ?? 'wallet';
+  const avatarHue = Array.from(avatarSeed).reduce((sum, char) => sum + char.charCodeAt(0), 0) % 360;
+  const avatarText = activeAddress ? activeAddress.slice(2, 4).toUpperCase() : 'WL';
+
   return (
-    <div className="flex flex-col items-end gap-2">
-      {error && (
+    <div className="relative flex flex-col items-end gap-2" ref={detailsRef}>
+      {displayError && (
         <span className="text-xs text-red-600 dark:text-red-400">
-          {error}
+          {displayError}
         </span>
       )}
       <div className="flex items-center gap-2">
-        {connected && address ? (
+        {activeAddress ? (
           <>
-            <span className="rounded bg-cyan-100 dark:bg-cyan-900 px-2 py-1 text-xs font-mono text-cyan-700 dark:text-cyan-300">
-              {shortenAddress(address, 6)}
-            </span>
-            {balance && (
-              <span className="text-xs text-gray-700 dark:text-gray-300">
-                {balance} ARC
+            <button
+              onClick={() => setShowDetails((prev) => !prev)}
+              className="rounded border border-cyan-300 bg-cyan-50 px-3 py-1 text-sm font-semibold tracking-wide text-cyan-900 shadow-sm transition hover:bg-cyan-100 dark:border-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-200 dark:hover:bg-cyan-800/60"
+              title="Wallet details"
+            >
+              <span
+                className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white"
+                style={{ backgroundColor: `hsl(${avatarHue} 72% 42%)` }}
+              >
+                {avatarText}
               </span>
-            )}
+              {shortenAddress(activeAddress, 6)}
+            </button>
             {loading && (
               <span className="text-xs text-gray-500 dark:text-gray-400 animate-pulse">
-                Đang tải...
+                Loading...
               </span>
             )}
-            <button
-              onClick={handleDisconnect}
-              className="rounded px-2 py-1 text-xs bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800 transition"
-              title="Ngắt kết nối ví"
-            >
-              Ngắt
-            </button>
+
+            {showDetails && (
+              <div className="absolute right-0 top-12 z-50 w-72 rounded-xl border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    Connected wallet
+                  </span>
+                  <span className="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                    Online
+                  </span>
+                </div>
+
+                <div className="space-y-2 text-xs text-gray-700 dark:text-gray-300">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-gray-500 dark:text-gray-400">Address</span>
+                    <span className="font-mono font-medium">{shortenAddress(activeAddress, 6)}</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-gray-500 dark:text-gray-400">Balance</span>
+                    <span className="font-semibold text-cyan-700 dark:text-cyan-300">{balance ?? '0.00'} USDC</span>
+                  </div>
+                </div>
+                <div className="mt-4 flex justify-end">
+                  <button
+                    onClick={handleDisconnect}
+                    className="rounded px-2 py-1 text-xs bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800 transition"
+                    title="Disconnect wallet"
+                  >
+                    Disconnect
+                  </button>
+                </div>
+              </div>
+            )}
           </>
         ) : (
           <button
             onClick={handleConnect}
             disabled={loading}
             className="rounded px-3 py-1 text-xs bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-200 dark:hover:bg-cyan-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
-            title="Kết nối ví"
+            title="Connect wallet"
           >
-            {loading ? 'Đang kết nối...' : 'Kết nối ví'}
+            {loading ? 'Connecting...' : 'Connect wallet'}
           </button>
         )}
       </div>

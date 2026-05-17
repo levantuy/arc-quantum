@@ -1,6 +1,6 @@
 .pageShell {
   min-height: 100vh;
-  padding: 40px 24px 56px;
+  padding: 10px 24px 56px;
   background: var(--tw-bg-opacity, 1) theme('colors.background');
 }
 
@@ -457,13 +457,19 @@
   inset: 0;
   padding: 24px;
   background: rgba(20, 52, 52, 0.42);
-  display: grid;
-  place-items: center;
+  min-height: 100dvh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
   z-index: 50;
 }
 
 .modalCard {
   width: min(760px, 100%);
+  margin-top: 24px;
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
 }
 
 .previewHero strong {

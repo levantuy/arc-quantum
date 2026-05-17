@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "arc_quantum"."User" (
+CREATE TABLE "public"."User" (
     "id" BIGSERIAL NOT NULL,
     "address" TEXT NOT NULL,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
@@ -10,7 +10,7 @@ CREATE TABLE "arc_quantum"."User" (
 );
 
 -- CreateTable
-CREATE TABLE "arc_quantum"."Transaction" (
+CREATE TABLE "public"."Transaction" (
     "id" BIGSERIAL NOT NULL,
     "hash" TEXT NOT NULL,
     "from" TEXT NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE "arc_quantum"."Transaction" (
 );
 
 -- CreateTable
-CREATE TABLE "arc_quantum"."Token" (
+CREATE TABLE "public"."Token" (
     "id" BIGSERIAL NOT NULL,
     "address" TEXT NOT NULL,
     "name" TEXT,
@@ -41,7 +41,7 @@ CREATE TABLE "arc_quantum"."Token" (
 );
 
 -- CreateTable
-CREATE TABLE "arc_quantum"."BridgeConfig" (
+CREATE TABLE "public"."BridgeConfig" (
     "id" BIGSERIAL NOT NULL,
     "chainFrom" INTEGER NOT NULL,
     "chainTo" INTEGER NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE "arc_quantum"."BridgeConfig" (
 );
 
 -- CreateTable
-CREATE TABLE "arc_quantum"."AuditLog" (
+CREATE TABLE "public"."AuditLog" (
     "id" BIGSERIAL NOT NULL,
     "action" TEXT NOT NULL,
     "detail" TEXT,
@@ -70,7 +70,7 @@ CREATE TABLE "arc_quantum"."AuditLog" (
 );
 
 -- CreateTable
-CREATE TABLE "arc_quantum"."AdminNonce" (
+CREATE TABLE "public"."AdminNonce" (
     "id" BIGSERIAL NOT NULL,
     "userId" BIGINT,
     "address" TEXT NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE "arc_quantum"."AdminNonce" (
 );
 
 -- CreateTable
-CREATE TABLE "arc_quantum"."AdminSession" (
+CREATE TABLE "public"."AdminSession" (
     "id" BIGSERIAL NOT NULL,
     "userId" BIGINT NOT NULL,
     "tokenHash" TEXT NOT NULL,
@@ -95,37 +95,37 @@ CREATE TABLE "arc_quantum"."AdminSession" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_address_key" ON "arc_quantum"."User"("address");
+CREATE UNIQUE INDEX "User_address_key" ON "public"."User"("address");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Transaction_hash_key" ON "arc_quantum"."Transaction"("hash");
+CREATE UNIQUE INDEX "Transaction_hash_key" ON "public"."Transaction"("hash");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Token_address_chainId_key" ON "arc_quantum"."Token"("address", "chainId");
+CREATE UNIQUE INDEX "Token_address_chainId_key" ON "public"."Token"("address", "chainId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "BridgeConfig_chainFrom_chainTo_key" ON "arc_quantum"."BridgeConfig"("chainFrom", "chainTo");
+CREATE UNIQUE INDEX "BridgeConfig_chainFrom_chainTo_key" ON "public"."BridgeConfig"("chainFrom", "chainTo");
 
 -- CreateIndex
-CREATE INDEX "AdminNonce_address_nonce_idx" ON "arc_quantum"."AdminNonce"("address", "nonce");
+CREATE INDEX "AdminNonce_address_nonce_idx" ON "public"."AdminNonce"("address", "nonce");
 
 -- CreateIndex
-CREATE INDEX "AdminNonce_expiresAt_idx" ON "arc_quantum"."AdminNonce"("expiresAt");
+CREATE INDEX "AdminNonce_expiresAt_idx" ON "public"."AdminNonce"("expiresAt");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "AdminSession_tokenHash_key" ON "arc_quantum"."AdminSession"("tokenHash");
+CREATE UNIQUE INDEX "AdminSession_tokenHash_key" ON "public"."AdminSession"("tokenHash");
 
 -- CreateIndex
-CREATE INDEX "AdminSession_expiresAt_idx" ON "arc_quantum"."AdminSession"("expiresAt");
+CREATE INDEX "AdminSession_expiresAt_idx" ON "public"."AdminSession"("expiresAt");
 
 -- AddForeignKey
-ALTER TABLE "arc_quantum"."Transaction" ADD CONSTRAINT "Transaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "arc_quantum"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."Transaction" ADD CONSTRAINT "Transaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "arc_quantum"."AuditLog" ADD CONSTRAINT "AuditLog_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "arc_quantum"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."AuditLog" ADD CONSTRAINT "AuditLog_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "public"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "arc_quantum"."AdminNonce" ADD CONSTRAINT "AdminNonce_userId_fkey" FOREIGN KEY ("userId") REFERENCES "arc_quantum"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."AdminNonce" ADD CONSTRAINT "AdminNonce_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "arc_quantum"."AdminSession" ADD CONSTRAINT "AdminSession_userId_fkey" FOREIGN KEY ("userId") REFERENCES "arc_quantum"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."AdminSession" ADD CONSTRAINT "AdminSession_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

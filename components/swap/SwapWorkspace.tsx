@@ -73,7 +73,7 @@ function formatTokenAmount(value: number) {
     return '--';
   }
 
-  return new Intl.NumberFormat('vi-VN', {
+  return new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 0,
     maximumFractionDigits: 6,
   }).format(value);
@@ -106,7 +106,7 @@ function buildQuote(fromToken: SwapToken, toToken: SwapToken, amountText: string
       lpFee: 0,
       gasUsd: 0.86,
       warning: null,
-      error: 'Nhập số lượng lớn hơn 0 để nhận quote.',
+      error: 'Enter an amount greater than 0 to get a quote.',
     };
   }
 
@@ -120,7 +120,7 @@ function buildQuote(fromToken: SwapToken, toToken: SwapToken, amountText: string
       lpFee: 0,
       gasUsd: 0.86,
       warning: null,
-      error: 'Slippage phải nằm trong khoảng 0.1% đến 5%.',
+      error: 'Slippage must be between 0.1% and 5%.',
     };
   }
 
@@ -134,7 +134,7 @@ function buildQuote(fromToken: SwapToken, toToken: SwapToken, amountText: string
       lpFee: amount * 0.0015,
       gasUsd: 0.86,
       warning: null,
-      error: 'Số dư không đủ để thực hiện giao dịch này.',
+      error: 'Insufficient balance to execute this trade.',
     };
   }
 
@@ -155,8 +155,8 @@ function buildQuote(fromToken: SwapToken, toToken: SwapToken, amountText: string
     priceImpact,
     lpFee,
     gasUsd,
-    warning: priceImpact > 5 ? 'Price impact đang cao, cần rà lại slippage trước khi ký.' : null,
-    error: hasLowLiquidity ? 'Không đủ thanh khoản cho cặp token ở quy mô giao dịch này.' : null,
+    warning: priceImpact > 5 ? 'Price impact is high. Review slippage before signing.' : null,
+    error: hasLowLiquidity ? 'Insufficient liquidity for this token pair at the current trade size.' : null,
   };
 }
 
@@ -245,7 +245,7 @@ export function SwapWorkspace() {
   }
 
   function handleConfirmSwap() {
-    const submittedAt = new Date().toLocaleTimeString('vi-VN', {
+    const submittedAt = new Date().toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
@@ -293,20 +293,20 @@ export function SwapWorkspace() {
       <section className={styles.heroPanel}>
         <div className={styles.heroCopy}>
           <span className={styles.badge}>Swap Module MVP</span>
-          <h1>Hoan doi token tren Arc voi luong UX san sang cho giao dich that.</h1>
+          <h1>Swap tokens on Arc with a production-ready UX flow.</h1>
           <p>
-            Giao dien nay hien thuc hoa luong quote, preview, canh bao slippage va trang thai giao dich cho
-            module Swap theo tai lieu SRS.
+            This interface implements quote, preview, slippage alerts, and transaction status tracking for
+            the Swap module based on the SRS.
           </p>
           <div className={styles.heroActions}>
             {connected && address ? (
               <div className={styles.walletChip}>
                 <span className={styles.walletDot} />
-                Vi dang ket noi: {shortenAddress(address)}
+                Connected wallet: {shortenAddress(address)}
               </div>
             ) : (
               <button type="button" className={styles.primaryButton} onClick={handleConnectWallet}>
-                Ket noi vi
+                Connect wallet
               </button>
             )}
             <div className={styles.networkPill}>Arc Mainnet</div>
@@ -316,18 +316,18 @@ export function SwapWorkspace() {
         <div className={styles.metricGrid}>
           <article className={styles.metricCard}>
             <span>Quote latency</span>
-            <strong>&lt; 1 giay</strong>
-            <p>Du lieu gia va route duoc tinh ngay tren client de nguoi dung ra quyet dinh nhanh.</p>
+            <strong>&lt; 1 second</strong>
+            <p>Price and route data are computed on the client so users can decide quickly.</p>
           </article>
           <article className={styles.metricCard}>
             <span>Slippage guard</span>
             <strong>0.1% - 5%</strong>
-            <p>Rang buoc dung theo SRS de tranh swap qua nguong an toan cua MVP.</p>
+            <p>SRS-aligned constraints prevent swaps outside the MVP safety threshold.</p>
           </article>
           <article className={styles.metricCard}>
             <span>Liquidity signal</span>
-            <strong>Canh bao som</strong>
-            <p>Ban do thanh khoan duoc mo phong de chan quote khong kha thi truoc khi ky.</p>
+            <strong>Early warning</strong>
+            <p>Liquidity is simulated to block infeasible quotes before signing.</p>
           </article>
         </div>
       </section>
@@ -337,15 +337,15 @@ export function SwapWorkspace() {
           <div className={styles.cardHeader}>
             <div>
               <p className={styles.eyebrow}>Swap form</p>
-              <h2>Build giao dich</h2>
+              <h2>Build transaction</h2>
             </div>
             <div className={styles.inlineStat}>{formatCurrency(totalUsd || 0)}</div>
           </div>
 
           <div className={styles.tokenPanel}>
             <div className={styles.fieldRow}>
-              <label htmlFor="from-token">Token nguon</label>
-              <span>So du: {formatTokenAmount(fromToken.balance)} {fromToken.symbol}</span>
+              <label htmlFor="from-token">From token</label>
+              <span>Balance: {formatTokenAmount(fromToken.balance)} {fromToken.symbol}</span>
             </div>
             <div className={styles.inputGroup}>
               <select
@@ -377,7 +377,7 @@ export function SwapWorkspace() {
           </div>
 
           <div className={styles.flipRow}>
-            <div className={styles.routeHint}>Route du kien: {quote.route}</div>
+            <div className={styles.routeHint}>Estimated route: {quote.route}</div>
             <button type="button" className={styles.flipButton} onClick={handleFlipPair}>
               Swap pair
             </button>
@@ -385,9 +385,9 @@ export function SwapWorkspace() {
 
           <div className={styles.tokenPanel}>
             <div className={styles.fieldRow}>
-              <label htmlFor="to-token">Token dich</label>
+              <label htmlFor="to-token">To token</label>
               <span>
-                Uoc tinh nhan: {formatTokenAmount(quote.expectedOutput)} {toToken.symbol}
+                Estimated receive: {formatTokenAmount(quote.expectedOutput)} {toToken.symbol}
               </span>
             </div>
             <div className={styles.inputGroup}>
@@ -441,7 +441,7 @@ export function SwapWorkspace() {
 
           {quote.error ? <p className={styles.errorText}>{quote.error}</p> : null}
           {!quote.error && quote.warning ? <p className={styles.warningText}>{quote.warning}</p> : null}
-          {!connected ? <p className={styles.noticeText}>Can ket noi vi truoc khi mo preview va ky giao dich.</p> : null}
+          {!connected ? <p className={styles.noticeText}>Connect your wallet before opening preview and signing.</p> : null}
 
           <button
             type="button"
@@ -449,7 +449,7 @@ export function SwapWorkspace() {
             disabled={!canSubmit}
             onClick={() => setPreviewOpen(true)}
           >
-            Xem truoc giao dich
+            Preview transaction
           </button>
         </article>
 
@@ -458,14 +458,14 @@ export function SwapWorkspace() {
             <div className={styles.cardHeader}>
               <div>
                 <p className={styles.eyebrow}>Market snapshot</p>
-                <h2>Chi tiet quote</h2>
+                <h2>Quote details</h2>
               </div>
               <div className={styles.pulseBadge}>Live mock</div>
             </div>
 
             <dl className={styles.detailList}>
               <div>
-                <dt>Ty gia</dt>
+                <dt>Exchange rate</dt>
                 <dd>
                   1 {fromToken.symbol} = {formatTokenAmount(quote.exchangeRate)} {toToken.symbol}
                 </dd>
@@ -497,14 +497,14 @@ export function SwapWorkspace() {
             <div className={styles.cardHeader}>
               <div>
                 <p className={styles.eyebrow}>Execution guardrails</p>
-                <h2>Dieu kien nghiep vu</h2>
+                <h2>Business rules</h2>
               </div>
             </div>
             <ul className={styles.ruleList}>
-              <li>Token nguon va token dich khong duoc trung nhau.</li>
-              <li>Canh bao mau vang khi price impact vuot 5%.</li>
-              <li>Chan giao dich neu so du hoac thanh khoan khong du.</li>
-              <li>Preview tong hop route, phi, minimum received truoc luc ky.</li>
+              <li>From token and to token must be different.</li>
+              <li>Show a warning when price impact exceeds 5%.</li>
+              <li>Block trades when balance or liquidity is insufficient.</li>
+              <li>Preview summarizes route, fees, and minimum received before signing.</li>
             </ul>
           </article>
 
@@ -515,16 +515,16 @@ export function SwapWorkspace() {
                   <p className={styles.eyebrow}>Transaction status</p>
                   <h2>
                     {txProgress.phase === 'pending'
-                      ? 'Dang gui giao dich'
+                      ? 'Submitting transaction'
                       : txProgress.phase === 'confirming'
-                        ? 'Dang xac nhan on-chain'
-                        : 'Swap thanh cong'}
+                        ? 'Confirming on-chain'
+                        : 'Swap successful'}
                   </h2>
                 </div>
                 <div className={styles.statusPill}>{txProgress.confirmations}</div>
               </div>
 
-              <p className={styles.statusMeta}>TX hash: {shortenAddress(txProgress.hash, 6)} · Luc {txProgress.submittedAt}</p>
+              <p className={styles.statusMeta}>TX hash: {shortenAddress(txProgress.hash, 6)} · At {txProgress.submittedAt}</p>
               <div className={styles.progressBar}>
                 <span
                   style={{
@@ -539,8 +539,8 @@ export function SwapWorkspace() {
               </div>
               <p className={styles.statusHint}>
                 {txProgress.phase === 'success'
-                  ? 'So du va lich su co the duoc refresh o buoc tich hop API tiep theo.'
-                  : 'Trang thai dang mo phong de phuc vu slice UI/UX cua module Swap.'}
+                  ? 'Balance and history can be refreshed in the next API integration step.'
+                  : 'Status is currently simulated for the Swap module UI/UX slice.'}
               </p>
             </article>
           ) : null}
@@ -553,22 +553,22 @@ export function SwapWorkspace() {
             <div className={styles.cardHeader}>
               <div>
                 <p className={styles.eyebrow}>Preview</p>
-                <h2 id="swap-preview-title">Xac nhan giao dich Swap</h2>
+                <h2 id="swap-preview-title">Confirm swap transaction</h2>
               </div>
               <button type="button" className={styles.closeButton} onClick={() => setPreviewOpen(false)}>
-                Dong
+                Close
               </button>
             </div>
 
             <div className={styles.previewHero}>
               <div>
-                <span>Ban gui</span>
+                <span>You send</span>
                 <strong>
                   {formatTokenAmount(amountValue)} {fromToken.symbol}
                 </strong>
               </div>
               <div>
-                <span>Ban nhan</span>
+                <span>You receive</span>
                 <strong>
                   {formatTokenAmount(quote.expectedOutput)} {toToken.symbol}
                 </strong>
@@ -587,13 +587,13 @@ export function SwapWorkspace() {
                 </dd>
               </div>
               <div>
-                <dt>Ty gia</dt>
+                <dt>Exchange rate</dt>
                 <dd>
                   1 {fromToken.symbol} = {formatTokenAmount(quote.exchangeRate)} {toToken.symbol}
                 </dd>
               </div>
               <div>
-                <dt>Phi uoc tinh</dt>
+                <dt>Estimated fee</dt>
                 <dd>{formatCurrency(quote.gasUsd + quote.lpFee * fromToken.priceUsd)}</dd>
               </div>
               <div>
@@ -610,7 +610,7 @@ export function SwapWorkspace() {
 
             <div className={styles.modalActions}>
               <button type="button" className={styles.secondaryButton} onClick={() => setPreviewOpen(false)}>
-                Quay lai chinh sua
+                Back to edit
               </button>
               <button type="button" className={styles.primaryButton} onClick={handleConfirmSwap}>
                 Confirm and sign

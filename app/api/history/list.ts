@@ -1,4 +1,4 @@
-// API route: Lấy lịch sử giao dịch
+// API route: Get transaction history
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {

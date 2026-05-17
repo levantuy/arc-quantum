@@ -1,4 +1,4 @@
-// API route: Lấy unified balance từ Arc blockchain
+// API route: Get unified balance from Arc blockchain
 import { NextRequest, NextResponse } from 'next/server';
 import { formatEther } from 'ethers';
 import { arcProvider } from '@/lib/arc/client';

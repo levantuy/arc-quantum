@@ -1,4 +1,4 @@
-// API route: Validate TX trước khi ký
+// API route: Validate transaction before signing
 import { NextRequest, NextResponse } from 'next/server';
 import { arcProvider } from '@/lib/arc/client';
 

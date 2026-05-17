@@ -68,7 +68,7 @@ export async function GET(req: NextRequest) {
     if (isDatabaseUnavailableError(error)) {
       return NextResponse.json(
         {
-          error: 'Khong the ket noi co so du lieu lich su luc nay. Vui long thu lai sau.',
+          error: 'Unable to connect to the history database right now. Please try again later.',
           history: [],
         },
         { status: 503 }
@@ -77,7 +77,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(
       {
-        error: 'Da co loi xay ra khi tai lich su giao dich.',
+        error: 'An error occurred while loading transaction history.',
         history: [],
       },
       { status: 500 }

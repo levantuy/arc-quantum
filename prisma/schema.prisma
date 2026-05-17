@@ -111,3 +111,35 @@ model AdminSession {
 
   @@index([expiresAt])
 }
+
+/// Bridge transaction record for cross-chain transfers
+model BridgeTransaction {
+  id            BigInt   @id @default(autoincrement())
+  userAddress   String
+  fromChainId   Int
+  toChainId     Int
+  tokenAddress  String
+  amount        String
+  status        String   // pending, success, failed
+  txHashSource  String?  // hash giao dịch trên chain nguồn
+  txHashDest    String?  // hash giao dịch trên chain đích
+  errorMessage  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  logs          BridgeTransactionLog[]
+
+  @@index([userAddress, createdAt(sort: Desc)])
+  @@index([fromChainId, toChainId, createdAt(sort: Desc)])
+}
+
+/// Audit log for each step in a bridge transaction
+model BridgeTransactionLog {
+  id                  BigInt   @id @default(autoincrement())
+  bridgeTransaction   BridgeTransaction @relation(fields: [bridgeTransactionId], references: [id])
+  bridgeTransactionId BigInt
+  step                String   // Tên bước xử lý (init, lock, wait, mint, done, error...)
+  detail              String?  // Thông tin chi tiết (JSON/text)
+  createdAt           DateTime @default(now())
+
+  @@index([bridgeTransactionId, createdAt])
+}
