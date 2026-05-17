@@ -13,15 +13,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi" className="min-h-full" suppressHydrationWarning>
-      <body className="min-h-screen flex flex-col font-sans bg-background text-primary dark:bg-darkbg dark:text-white transition-colors duration-300">
+    <html lang="vi" className="min-h-dvh" suppressHydrationWarning>
+      <body className="min-h-dvh flex flex-col font-sans transition-colors duration-300">
         <Navbar />
-        <main className="flex-1 container mx-auto px-2 md:px-6 py-10 flex items-center justify-center">
-          <div className="w-full max-w-7xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12 min-h-[60vh] border border-blue-100 dark:border-zinc-800 transition-colors duration-300">
+        <main className="flex-1 container mx-auto px-3 md:px-6 pb-20 flex items-center justify-center">
+          <div className="app-surface w-full max-w-7xl p-8 md:p-10 min-h-[60vh] transition-colors duration-300">
             {children}
           </div>
         </main>
-        <footer className="bg-white/80 dark:bg-zinc-900/80 border-t border-blue-100 dark:border-zinc-800 text-gray-500 dark:text-gray-400 text-sm text-center py-4 mt-8 shadow-inner rounded-t-2xl transition-colors duration-300">
+        <footer className="app-footer fixed bottom-0 inset-x-0 z-30 text-sm text-center py-4 transition-colors duration-300">
           © 2026 Arc Quantum. All rights reserved.
         </footer>
       </body>

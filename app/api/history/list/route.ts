@@ -5,6 +5,23 @@ function normalizeAddress(value: string) {
   return value.trim().toLowerCase();
 }
 
+function isDatabaseUnavailableError(error: unknown) {
+  const prismaCode =
+    typeof error === 'object' && error !== null && 'code' in error
+      ? String((error as { code?: string }).code)
+      : null;
+
+  if (prismaCode === 'P5010' || prismaCode === 'P1001' || prismaCode === 'P1002') {
+    return true;
+  }
+
+  const message = error instanceof Error ? error.message : String(error ?? '');
+
+  return /cannot fetch data from service|fetch failed|can't reach database server|timed out/i.test(
+    message
+  );
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const address = searchParams.get('address');
@@ -48,12 +65,7 @@ export async function GET(req: NextRequest) {
       })),
     });
   } catch (error) {
-    const prismaCode =
-      typeof error === 'object' && error !== null && 'code' in error
-        ? String((error as { code?: string }).code)
-        : null;
-
-    if (prismaCode === 'P5010') {
+    if (isDatabaseUnavailableError(error)) {
       return NextResponse.json(
         {
           error: 'Khong the ket noi co so du lieu lich su luc nay. Vui long thu lai sau.',

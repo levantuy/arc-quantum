@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class',
   content: [
     './app/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
@@ -13,14 +12,12 @@ module.exports = {
         sans: ['Inter', 'ui-sans-serif', 'system-ui'],
       },
       colors: {
-        primary: {
-          DEFAULT: '#2B2D42',
-          light: '#8D99AE',
-          dark: '#1A1B26',
-        },
-        accent: '#00B4D8',
-        background: '#F8F9FA',
-        darkbg: '#18181B',
+        primary: 'var(--color-primary)',
+        'primary-light': 'var(--color-primary-light)',
+        'primary-dark': 'var(--color-primary-dark)',
+        accent: 'var(--color-accent)',
+        background: 'var(--color-background)',
+        darkbg: 'var(--color-darkbg)',
       },
       borderRadius: {
         xl: '1rem',
@@ -28,4 +25,5 @@ module.exports = {
     },
   },
   plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
+};
 };

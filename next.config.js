@@ -8,11 +8,20 @@ const nextConfig = {
   // Configure turbopack root to avoid warnings
   turbopack: {
     root: process.cwd(),
+    resolveAlias: {
+      '@': './',
+    },
   },
   
   // Environment variables
   env: {
     // Add any client-side environment variables here if needed
+  },
+  
+  // Ensure HMR is properly configured
+  onDemandEntries: {
+    maxInactiveAge: 15 * 1000,
+    pagesBufferLength: 2,
   },
 };
 

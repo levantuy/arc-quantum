@@ -4,6 +4,7 @@ const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 function makePrisma() {
   return new PrismaClient({
+    // Use the DATABASE_URL from prisma/schema.prisma directly.
     log: process.env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
   });
 }

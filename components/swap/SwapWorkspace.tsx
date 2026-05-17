@@ -193,9 +193,25 @@ export function SwapWorkspace() {
     timeoutRefs.current.push(timeoutId);
   }
 
-  function handleDemoConnect() {
-    setAddress('0xA12C4d7e91a31e5f9D4d3f11c4d52E72F2A98B10');
-    setConnected(true);
+  async function handleConnectWallet() {
+    try {
+      if (typeof window === 'undefined' || !(window as any).ethereum) {
+        alert('MetaMask or Web3 wallet not found. Please install a wallet extension.');
+        return;
+      }
+
+      const accounts = await (window as any).ethereum.request({
+        method: 'eth_requestAccounts',
+      });
+      
+      if (accounts && accounts.length > 0) {
+        setAddress(accounts[0]);
+        setConnected(true);
+      }
+    } catch (error: any) {
+      console.error('Failed to connect wallet:', error);
+      alert(error.message || 'Failed to connect wallet');
+    }
   }
 
   function handleFromTokenChange(nextSymbol: string) {
@@ -289,8 +305,8 @@ export function SwapWorkspace() {
                 Vi dang ket noi: {shortenAddress(address)}
               </div>
             ) : (
-              <button type="button" className={styles.primaryButton} onClick={handleDemoConnect}>
-                Ket noi vi demo
+              <button type="button" className={styles.primaryButton} onClick={handleConnectWallet}>
+                Ket noi vi
               </button>
             )}
             <div className={styles.networkPill}>Arc Mainnet</div>

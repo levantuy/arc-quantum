@@ -106,7 +106,7 @@ npm run seed:admin
 ### Start Development Server
 
 ```bash
-npm run dev
+npm start
 ```
 
 The application will be available at `http://localhost:3000`
@@ -120,14 +120,16 @@ npm run build
 ### Start Production Server
 
 ```bash
-npm start
+npm run build
+npm run start:prod
 ```
 
 ## Available Scripts
 
 - `npm run dev` - Start development server with hot reload
 - `npm run build` - Create production build
-- `npm start` - Run production server
+- `npm start` - Start development server with hot reload (default)
+- `npm run start:prod` - Run production server (requires `npm run build` first)
 - `npm run prisma:generate` - Generate Prisma client
 - `npm run prisma:migrate` - Run database migrations
 - `npm run seed:admin` - Seed initial admin user

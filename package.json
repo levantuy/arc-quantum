@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",
-    "start": "next start",
+    "start": "next dev --port 3000",
+    "start:prod": "next start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate",
