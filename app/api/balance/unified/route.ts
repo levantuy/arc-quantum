@@ -1,5 +1,6 @@
 // API route: Lấy unified balance từ Arc blockchain
 import { NextRequest, NextResponse } from 'next/server';
+import { formatEther } from 'ethers';
 import { arcProvider } from '@/lib/arc/client';
 
 export async function GET(req: NextRequest) {
@@ -18,7 +19,7 @@ export async function GET(req: NextRequest) {
     const balanceWei = await arcProvider.getBalance(address);
     
     // Convert from Wei to ARC (assuming 18 decimals)
-    const balanceArc = arcProvider.formatEther(balanceWei);
+    const balanceArc = formatEther(balanceWei);
 
     return NextResponse.json({
       balance: parseFloat(balanceArc).toFixed(4),

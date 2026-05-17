@@ -63,7 +63,8 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const gasPrice = await arcProvider.getGasPrice();
+    const feeData = await arcProvider.getFeeData();
+    const gasPrice = feeData.gasPrice ?? feeData.maxFeePerGas ?? BigInt(0);
     const totalGasCost = estimatedGas * gasPrice;
     const totalRequired = amount + totalGasCost;
 

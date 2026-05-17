@@ -98,8 +98,8 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="navbar-arc sticky top-0 z-40 w-full flex justify-center bg-transparent py-4 px-4">
-        <div className="navbar-arc-inner relative w-full max-w-7xl flex items-center justify-between bg-white/95 dark:bg-zinc-900/95 rounded-2xl shadow-lg border border-blue-100 dark:border-zinc-800 px-4 py-2 gap-2 transition-colors duration-300">
+      <nav className="navbar-arc sticky top-0 z-40 w-full flex justify-center mt-4">
+        <div className="navbar-arc-inner relative w-full max-w-7xl flex items-center justify-between rounded-2xl shadow-lg border border-blue-100 dark:border-zinc-800 px-4 py-2 gap-2 transition-colors duration-300">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-cyan-400/20 text-base font-bold text-cyan-500 dark:bg-cyan-600/20 dark:text-cyan-300">AQ</span>

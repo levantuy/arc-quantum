@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import './globals.css';
 
@@ -16,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="vi" className="min-h-dvh" suppressHydrationWarning>
       <body className="min-h-dvh flex flex-col font-sans transition-colors duration-300">
         <Navbar />
-        <main className="flex-1 container mx-auto px-3 md:px-6 pb-20 flex items-center justify-center">
+        <main className="flex-1 container mx-auto px-3 md:px-6 pb-20 flex items-center justify-center transition-colors duration-300">
           <div className="app-surface w-full max-w-7xl p-8 md:p-10 min-h-[60vh] transition-colors duration-300">
             {children}
           </div>
