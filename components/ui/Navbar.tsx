@@ -103,7 +103,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-cyan-400/20 text-base font-bold text-cyan-500 dark:bg-cyan-600/20 dark:text-cyan-300">AQ</span>
-              <span className="text-base font-semibold tracking-tight text-gray-900 dark:text-white">Arc Quantum Docs</span>
+              <span className="text-base font-semibold tracking-tight text-gray-900 dark:text-white">Arc Quantum</span>
             </Link>
           </div>
           <ul className="hidden md:flex items-center gap-2 left-1/4 -translate-x-1/4 absolute" >
