@@ -1,0 +1,102 @@
+// Prisma schema for Arc Quantum DeFi App
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        BigInt   @id @default(autoincrement())
+  address   String   @unique
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  transactions Transaction[]
+  adminSessions AdminSession[]
+  adminNonces AdminNonce[]
+  auditLogs   AuditLog[]
+}
+
+model Transaction {
+  id        BigInt   @id @default(autoincrement())
+  hash      String   @unique
+  from      String
+  to        String
+  amount    String
+  status    String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    BigInt?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Token {
+  id        BigInt   @id @default(autoincrement())
+  address   String
+  name      String?
+  symbol    String
+  decimals  Int
+  chainId   Int
+  logoUrl   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([address, chainId])
+}
+
+model BridgeConfig {
+  id        BigInt   @id @default(autoincrement())
+  chainFrom Int
+  chainTo   Int
+  minAmount String
+  maxAmount String
+  fee       String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([chainFrom, chainTo])
+}
+
+model AuditLog {
+  id          BigInt   @id @default(autoincrement())
+  action      String
+  detail      String?
+  oldData     String?
+  newData     String?
+  admin       User?    @relation(fields: [adminId], references: [id])
+  adminId     BigInt?
+  adminAddress String
+  createdAt   DateTime @default(now())
+}
+
+model AdminNonce {
+  id        BigInt   @id @default(autoincrement())
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    BigInt?
+  address   String
+  nonce     String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([address, nonce])
+  @@index([expiresAt])
+}
+
+model AdminSession {
+  id          BigInt   @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      BigInt
+  tokenHash   String   @unique
+  expiresAt   DateTime
+  revokedAt   DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([expiresAt])
+}
