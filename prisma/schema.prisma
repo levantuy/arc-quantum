@@ -22,16 +22,27 @@ model User {
 }
 
 model Transaction {
-  id        BigInt   @id @default(autoincrement())
-  hash      String   @unique
-  from      String
-  to        String
-  amount    String
-  status    String
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    BigInt?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           BigInt   @id @default(autoincrement())
+  hash         String   @unique
+  txType       String   @default("unknown")
+  from         String
+  to           String
+  amount       String
+  amountIn     String?
+  amountOut    String?
+  tokenIn      String?
+  tokenOut     String?
+  chainId      Int?
+  status       String
+  explorerUrl  String?
+  errorMessage String?
+  user         User?    @relation(fields: [userId], references: [id])
+  userId       BigInt?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([from, createdAt(sort: Desc)])
+  @@index([txType, createdAt(sort: Desc)])
 }
 
 model Token {

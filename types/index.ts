@@ -17,9 +17,18 @@ export interface User {
 export interface Transaction {
   id: number;
   hash: string;
+  txType: 'swap' | 'bridge' | 'send' | 'unknown';
   from: Address;
   to: Address;
   amount: string;
-  status: 'pending' | 'success' | 'fail';
+  amountIn?: string | null;
+  amountOut?: string | null;
+  tokenIn?: string | null;
+  tokenOut?: string | null;
+  chainId?: number | null;
+  status: 'pending' | 'confirming' | 'success' | 'failed';
+  explorerUrl?: string | null;
+  errorMessage?: string | null;
   createdAt: string;
+  updatedAt?: string;
 }
