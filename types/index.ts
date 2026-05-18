@@ -58,6 +58,45 @@ export interface BridgeTransactionLog {
   createdAt: string;
 }
 
+// History Module - UC-HIS-001
+export type HistoryTabType = 'all' | 'send' | 'swap' | 'bridge';
+
+export interface HistoryFilters {
+  status: string;
+  dateFrom: string;
+  dateTo: string;
+  hash: string;
+}
+
+/** Normalised transaction used by the History module UI */
+export interface UnifiedTransaction {
+  /** Prefixed ID: "tx_<id>" or "bridge_<id>" */
+  id: string;
+  hash: string | null;
+  type: 'send' | 'swap' | 'bridge';
+  status: 'pending' | 'confirming' | 'success' | 'failed';
+  amount: string;
+  /** Token symbol or address (best-effort) */
+  token: string | null;
+  chainId?: number | null;
+  fromChainId?: number | null;
+  toChainId?: number | null;
+  explorerUrl?: string | null;
+  errorMessage?: string | null;
+  createdAt: string;
+  // Send/Swap extras
+  to?: string | null;
+  amountIn?: string | null;
+  amountOut?: string | null;
+  tokenIn?: string | null;
+  tokenOut?: string | null;
+  confirmedAt?: string | null;
+  // Bridge extras
+  txHashSource?: string | null;
+  txHashDest?: string | null;
+  tokenAddress?: string | null;
+}
+
 export interface BridgeTransferRequest {
   userAddress: Address;
   fromChainId: number;

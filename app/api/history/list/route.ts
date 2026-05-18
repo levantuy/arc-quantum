@@ -26,9 +26,13 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const address = searchParams.get('address');
   const txType = searchParams.get('type');
+  const status = searchParams.get('status');
+  const dateFrom = searchParams.get('dateFrom');
+  const dateTo = searchParams.get('dateTo');
+  const hash = searchParams.get('hash');
   const limitParam = Number(searchParams.get('limit') ?? '10');
   const offsetParam = Number(searchParams.get('offset') ?? '0');
-  
+
   const limit = Number.isFinite(limitParam) ? Math.min(Math.max(limitParam, 1), 50) : 10;
   const offset = Number.isFinite(offsetParam) && offsetParam >= 0 ? offsetParam : 0;
 
@@ -38,20 +42,27 @@ export async function GET(req: NextRequest) {
 
   try {
     const normalizedAddress = normalizeAddress(address);
-    
+
+    const where = {
+      from: normalizedAddress,
+      ...(txType && txType !== 'all' ? { txType } : {}),
+      ...(status ? { status } : {}),
+      ...(hash ? { hash: { contains: hash, mode: 'insensitive' as const } } : {}),
+      ...((dateFrom || dateTo)
+        ? {
+            createdAt: {
+              ...(dateFrom ? { gte: new Date(dateFrom) } : {}),
+              ...(dateTo ? { lte: new Date(dateTo) } : {}),
+            },
+          }
+        : {}),
+    };
+
     // Get total count
-    const total = await prisma.transaction.count({
-      where: {
-        from: normalizedAddress,
-        ...(txType && txType !== 'all' ? { txType } : {}),
-      },
-    });
+    const total = await prisma.transaction.count({ where });
 
     const transactions = await prisma.transaction.findMany({
-      where: {
-        from: normalizedAddress,
-        ...(txType && txType !== 'all' ? { txType } : {}),
-      },
+      where,
       orderBy: { createdAt: 'desc' },
       take: limit,
       skip: offset,
