@@ -333,12 +333,12 @@ export function SendForm() {
       {/* Action buttons */}
       <div className="flex gap-3 flex-wrap">
         {step !== 'estimated' && step !== 'sending' ? (
-          <Button onClick={handleEstimate} disabled={!canEstimate}>
+          <Button onClick={handleEstimate} disabled={!canEstimate} className='flex-1 py-2.5 px-4 btn-primary'>
             {step === 'estimating' ? 'Estimating...' : 'Estimate Gas'}
           </Button>
         ) : (
           <>
-            <Button onClick={handleSend} disabled={step === 'sending'}>
+            <Button onClick={handleSend} disabled={step === 'sending'} className='flex-1 py-2.5 px-4 btn-primary'>
               {step === 'sending' ? 'Sending...' : `Send ${tokenLabel}`}
             </Button>
             <button

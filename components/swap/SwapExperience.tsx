@@ -609,7 +609,7 @@ export function SwapExperience() {
                 type="button"
                 disabled={walletLoading}
                 onClick={() => void connect()}
-                className="w-full mt-2 py-2.5 px-4 bg-gradient-to-br from-teal-600 to-teal-800 text-white font-semibold rounded-lg hover:opacity-90 transition disabled:opacity-50 cursor-pointer border-0"
+                className="w-full mt-2 py-2.5 px-4 btn-primary"
               >
                 {walletLoading ? 'Connecting...' : 'Connect wallet'}
               </button>
@@ -618,7 +618,7 @@ export function SwapExperience() {
                 type="button"
                 disabled={!canSubmit}
                 onClick={() => setPreviewOpen(true)}
-                className="w-full mt-2 py-2.5 px-4 bg-gradient-to-br from-teal-600 to-teal-800 text-white font-semibold rounded-lg hover:opacity-90 transition disabled:opacity-50 cursor-pointer border-0"
+                className="w-full mt-2 py-2.5 px-4 btn-primary"
               >
                 {busy ? 'Processing...' : 'Preview & sign'}
               </button>
@@ -858,7 +858,7 @@ export function SwapExperience() {
               <button
                 type="button"
                 onClick={() => setPreviewOpen(false)}
-                className="flex-1 py-2.5 px-4 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition cursor-pointer border-0"
+                className="btn-secondary flex-1 py-2.5 px-4"
               >
                 Back
               </button>
@@ -866,7 +866,7 @@ export function SwapExperience() {
                 type="button"
                 onClick={() => void handleConfirmSwap()}
                 disabled={busy}
-                className="flex-1 py-2.5 px-4 bg-gradient-to-br from-teal-600 to-teal-800 text-white font-semibold rounded-lg hover:opacity-90 transition disabled:opacity-50 cursor-pointer border-0"
+                className="flex-1 py-2.5 px-4 btn-primary"
               >
                 {busy ? 'Submitting...' : 'Confirm & sign'}
               </button>

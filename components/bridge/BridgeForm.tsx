@@ -520,7 +520,7 @@ export const BridgeForm: React.FC<BridgeFormProps> = ({ onTransferSuccess }) => 
         <Button
           type="submit"
           disabled={loading}
-          className="w-full mt-6"
+          className="w-full py-2.5 px-4 btn-primary"
         >
           {loading ? 'Processing...' : 'Initiate Transfer'}
         </Button>
