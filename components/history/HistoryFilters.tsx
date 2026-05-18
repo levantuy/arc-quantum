@@ -2,11 +2,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HistoryFilters } from '@/types';
+import { HistoryFilters as HistoryFiltersType } from '@/types';
 
 interface HistoryFiltersProps {
-  filters: HistoryFilters;
-  onChange: (filters: HistoryFilters) => void;
+  filters: HistoryFiltersType;
+  onChange: (filters: HistoryFiltersType) => void;
 }
 
 const STATUS_OPTIONS = [
@@ -17,13 +17,13 @@ const STATUS_OPTIONS = [
   { value: 'failed', label: 'Failed' },
 ];
 
-const hasActiveFilters = (f: HistoryFilters) =>
+const hasActiveFilters = (f: HistoryFiltersType) =>
   Boolean(f.status || f.dateFrom || f.dateTo || f.hash);
 
 export const HistoryFilters: React.FC<HistoryFiltersProps> = ({ filters, onChange }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  function update(patch: Partial<HistoryFilters>) {
+  function update(patch: Partial<HistoryFiltersType>) {
     onChange({ ...filters, ...patch });
   }
 
