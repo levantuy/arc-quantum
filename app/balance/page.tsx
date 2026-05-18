@@ -31,7 +31,7 @@ export default function BalancePage() {
 
   React.useEffect(() => {
     if (!loading && balances.length === 0 && connected && !error) {
-      showToast('Chưa có tài sản nào', 'info');
+      showToast('No assets found', 'info');
     }
   }, [loading, balances, connected, error, showToast]);
 
@@ -46,11 +46,11 @@ export default function BalancePage() {
       <div className="flex items-center gap-4 mb-4">
         {address && <span className="text-slate-700 dark:text-slate-300 text-sm">{shortenAddress(address)}</span>}
         <Button onClick={refresh} disabled={loading || !connected} className="ml-auto">
-          Làm mới
+          Refresh
         </Button>
       </div>
       <div className="mb-6">
-        <span className="text-slate-500 dark:text-slate-400 text-xs">Tổng giá trị danh mục:</span>
+        <span className="text-slate-500 dark:text-slate-400 text-xs">Total portfolio value:</span>
         {loading ? (
           <Skeleton className="h-8 w-32 mt-2" />
         ) : (
@@ -63,14 +63,14 @@ export default function BalancePage() {
       </div>
 
       <div className="mb-6 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-gray-800 p-4">
-        <h2 className="text-sm font-semibold text-slate-800 dark:text-slate-200">Breakdown theo chain</h2>
+        <h2 className="text-sm font-semibold text-slate-800 dark:text-slate-200">Breakdown by chain</h2>
         {loading ? (
           <div className="mt-3 grid gap-2">
             <Skeleton className="h-5 w-48" />
             <Skeleton className="h-5 w-40" />
           </div>
         ) : chainBreakdown.length === 0 ? (
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Chưa có dữ liệu chain.</p>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">No chain data available.</p>
         ) : (
           <div className="mt-3 grid gap-2">
             {chainBreakdown.map((item, index) => (
