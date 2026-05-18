@@ -3,6 +3,7 @@
 
 /* Enable class-based dark mode: html.dark activates all dark: variants */
 @variant dark (&:where(.dark, .dark *));
+@variant light (&:where(.light, .light *));
 
 :root {
   --color-primary: #1f2937;
