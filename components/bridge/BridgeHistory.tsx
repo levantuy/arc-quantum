@@ -207,7 +207,7 @@ export const BridgeHistory: React.FC<BridgeHistoryProps> = ({
         {selectedTransaction ? (
           <BridgeStatus transaction={selectedTransaction} />
         ) : (
-          <div className="p-6 bg-gray-50 border border-gray-200 rounded-lg text-center">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow overflow-hidden p-4">
             <p className="text-gray-500">Select a transaction to view details</p>
           </div>
         )}
