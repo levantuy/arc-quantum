@@ -13,16 +13,16 @@ interface HistoryTableProps {
 }
 
 const TYPE_BADGE: Record<string, { label: string; cls: string }> = {
-  send: { label: 'Send', cls: 'bg-blue-50 text-blue-700 border-blue-100' },
-  swap: { label: 'Swap', cls: 'bg-purple-50 text-purple-700 border-purple-100' },
-  bridge: { label: 'Bridge', cls: 'bg-amber-50 text-amber-700 border-amber-100' },
+  send: { label: 'Send', cls: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800' },
+  swap: { label: 'Swap', cls: 'bg-purple-50 text-purple-700 border-purple-100 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-800' },
+  bridge: { label: 'Bridge', cls: 'bg-amber-50 text-amber-700 border-amber-100 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800' },
 };
 
 const STATUS_BADGE: Record<string, { label: string; cls: string; dot: string }> = {
-  pending: { label: 'Pending', cls: 'bg-yellow-50 text-yellow-700', dot: 'bg-yellow-400' },
-  confirming: { label: 'Confirming', cls: 'bg-blue-50 text-blue-700', dot: 'bg-blue-400' },
-  success: { label: 'Success', cls: 'bg-green-50 text-green-700', dot: 'bg-green-400' },
-  failed: { label: 'Failed', cls: 'bg-red-50 text-red-700', dot: 'bg-red-400' },
+  pending: { label: 'Pending', cls: 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300', dot: 'bg-yellow-400' },
+  confirming: { label: 'Confirming', cls: 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300', dot: 'bg-blue-400' },
+  success: { label: 'Success', cls: 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300', dot: 'bg-green-400' },
+  failed: { label: 'Failed', cls: 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300', dot: 'bg-red-400' },
 };
 
 function truncateHash(hash: string | null | undefined, len = 8): string {
@@ -48,13 +48,13 @@ function formatDate(iso: string): string {
 function ChainInfo({ item }: { item: UnifiedTransaction }) {
   if (item.type === 'bridge' && item.fromChainId && item.toChainId) {
     return (
-      <span className="text-xs text-slate-500">
+      <span className="text-xs text-slate-500 dark:text-slate-400">
         {getChainName(item.fromChainId)} → {getChainName(item.toChainId)}
       </span>
     );
   }
   if (item.chainId) {
-    return <span className="text-xs text-slate-500">{getChainName(item.chainId)}</span>;
+    return <span className="text-xs text-slate-500 dark:text-slate-400">{getChainName(item.chainId)}</span>;
   }
   return null;
 }
@@ -64,7 +64,7 @@ function AmountDisplay({ item }: { item: UnifiedTransaction }) {
     const tokenIn = item.tokenIn ? ` ${item.tokenIn}` : '';
     const tokenOut = item.tokenOut ? ` ${item.tokenOut}` : '';
     return (
-      <span className="text-sm font-medium text-slate-800">
+      <span className="text-sm font-medium text-slate-800 dark:text-slate-200">
         {item.amountIn}
         {tokenIn} → {item.amountOut}
         {tokenOut}
@@ -73,7 +73,7 @@ function AmountDisplay({ item }: { item: UnifiedTransaction }) {
   }
   const token = item.tokenIn ?? item.tokenOut ?? '';
   return (
-    <span className="text-sm font-medium text-slate-800">
+    <span className="text-sm font-medium text-slate-800 dark:text-slate-200">
       {item.amount}
       {token ? ` ${token}` : ''}
     </span>
@@ -84,7 +84,7 @@ function SkeletonRows() {
   return (
     <>
       {Array.from({ length: 5 }).map((_, i) => (
-        <tr key={i} className="border-b border-slate-100 last:border-0">
+        <tr key={i} className="border-b border-slate-100 dark:border-slate-800 last:border-0">
           <td className="px-4 py-3"><Skeleton className="h-5 w-16" /></td>
           <td className="px-4 py-3"><Skeleton className="h-5 w-24" /></td>
           <td className="px-4 py-3"><Skeleton className="h-5 w-32" /></td>
@@ -99,10 +99,10 @@ function SkeletonRows() {
 
 export const HistoryTable: React.FC<HistoryTableProps> = ({ items, loading, onSelect }) => {
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-900 shadow-sm">
       <table className="min-w-full text-left">
         <thead>
-          <tr className="border-b border-slate-100 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <tr className="border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-gray-800 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             <th className="px-4 py-3">Type</th>
             <th className="px-4 py-3">Hash</th>
             <th className="px-4 py-3">Amount</th>
@@ -122,7 +122,7 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({ items, loading, onSe
                 <tr
                   key={item.id}
                   onClick={() => onSelect(item)}
-                  className="cursor-pointer border-b border-slate-100 transition-colors last:border-0 hover:bg-amber-50"
+                  className="cursor-pointer border-b border-slate-100 dark:border-slate-800 transition-colors last:border-0 hover:bg-amber-50 dark:hover:bg-amber-950/20"
                 >
                   <td className="px-4 py-3">
                     <span
@@ -131,7 +131,7 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({ items, loading, onSe
                       {typeBadge.label}
                     </span>
                   </td>
-                  <td className="px-4 py-3 font-mono text-xs text-slate-600">
+                  <td className="px-4 py-3 font-mono text-xs text-slate-600 dark:text-slate-400">
                     {truncateHash(item.hash)}
                   </td>
                   <td className="px-4 py-3">
@@ -148,7 +148,7 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({ items, loading, onSe
                       {statusBadge.label}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-slate-500">{formatDate(item.createdAt)}</td>
+                  <td className="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">{formatDate(item.createdAt)}</td>
                 </tr>
               );
             })

@@ -21,15 +21,15 @@ function fmtGwei(wei: bigint): string {
 /** Display EstimatedGas from kit.estimateSend() */
 function GasEstimatePanel({ estimate }: { estimate: SendEstimate }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-2 text-sm">
-      <p className="font-medium text-slate-700">Gas Estimate</p>
+    <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-gray-800 p-4 space-y-2 text-sm">
+      <p className="font-medium text-slate-700 dark:text-slate-300">Gas Estimate</p>
       <div className="grid grid-cols-2 gap-x-6 gap-y-1">
-        <span className="text-slate-500">Estimated Fee</span>
-        <span className="text-slate-800 font-medium">{estimate.fee} ARC</span>
-        <span className="text-slate-500">Gas Units</span>
-        <span className="text-slate-800">{estimate.gas.toLocaleString()}</span>
-        <span className="text-slate-500">Gas Price</span>
-        <span className="text-slate-800">{fmtGwei(estimate.gasPrice)} Gwei</span>
+        <span className="text-slate-500 dark:text-slate-400">Estimated Fee</span>
+        <span className="text-slate-800 dark:text-slate-200 font-medium">{estimate.fee} ARC</span>
+        <span className="text-slate-500 dark:text-slate-400">Gas Units</span>
+        <span className="text-slate-800 dark:text-slate-200">{estimate.gas.toLocaleString()}</span>
+        <span className="text-slate-500 dark:text-slate-400">Gas Price</span>
+        <span className="text-slate-800 dark:text-slate-200">{fmtGwei(estimate.gasPrice)} Gwei</span>
       </div>
     </div>
   );
@@ -45,9 +45,9 @@ const TOKEN_PRESETS = [
 // -- Status badge --------------------------------------------------------------
 
 const STATUS_CLASSES: Record<string, string> = {
-  success: 'bg-emerald-100 text-emerald-800',
-  error:   'bg-red-100 text-red-800',
-  pending: 'bg-yellow-100 text-yellow-800',
+  success: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
+  error:   'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
+  pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300',
 };
 
 function StatusBadge({ state }: { state: string }) {
@@ -177,8 +177,8 @@ export function SendForm() {
 
   if (!connected) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-8 text-center space-y-4">
-        <p className="text-slate-600">Connect your wallet to send tokens.</p>
+      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-gray-800 p-8 text-center space-y-4">
+        <p className="text-slate-600 dark:text-slate-400">Connect your wallet to send tokens.</p>
         <Button onClick={connect}>Connect Wallet</Button>
       </div>
     );
@@ -188,8 +188,8 @@ export function SendForm() {
 
   if (wrongNetwork) {
     return (
-      <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-8 text-center space-y-4">
-        <p className="text-yellow-800">Please switch to Arc Testnet to send tokens.</p>
+      <div className="rounded-xl border border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-950/30 p-8 text-center space-y-4">
+        <p className="text-yellow-800 dark:text-yellow-300">Please switch to Arc Testnet to send tokens.</p>
         <Button onClick={switchNetwork}>Switch to Arc Testnet</Button>
       </div>
     );
@@ -199,22 +199,22 @@ export function SendForm() {
 
   if (step === 'success' && txResult) {
     return (
-      <div className="rounded-xl border border-emerald-200 bg-white p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-slate-900">Transaction Status</h2>
+      <div className="rounded-xl border border-emerald-200 dark:border-emerald-800 bg-white dark:bg-gray-900 p-6 space-y-4">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Transaction Status</h2>
         <StatusBadge state="success" />
-        <div className="rounded-lg bg-slate-50 p-4 space-y-2 text-sm">
+        <div className="rounded-lg bg-slate-50 dark:bg-gray-800 p-4 space-y-2 text-sm">
           {txResult.txHash && (
             <div className="flex justify-between gap-4">
-              <span className="text-slate-500 shrink-0">Tx Hash</span>
-              <span className="font-mono text-slate-800 break-all text-right">
+              <span className="text-slate-500 dark:text-slate-400 shrink-0">Tx Hash</span>
+              <span className="font-mono text-slate-800 dark:text-slate-200 break-all text-right">
                 {txResult.txHash.slice(0, 14)}…{txResult.txHash.slice(-8)}
               </span>
             </div>
           )}
           {txResult.name && (
             <div className="flex justify-between gap-4">
-              <span className="text-slate-500">Operation</span>
-              <span className="text-slate-800 capitalize">{txResult.name}</span>
+              <span className="text-slate-500 dark:text-slate-400">Operation</span>
+              <span className="text-slate-800 dark:text-slate-200 capitalize">{txResult.name}</span>
             </div>
           )}
         </div>
@@ -238,12 +238,12 @@ export function SendForm() {
   // -- Main form -----------------------------------------------------------
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-6 space-y-5">
-      <h2 className="text-lg font-semibold text-slate-900">Send Tokens</h2>
+    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-900 p-6 space-y-5">
+      <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Send Tokens</h2>
 
       {/* Token selector */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-slate-700">Token</label>
+        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Token</label>
         <div className="flex gap-2 flex-wrap">
           {TOKEN_PRESETS.map((t) => (
             <button
@@ -254,7 +254,7 @@ export function SendForm() {
               className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors disabled:opacity-50 ${
                 selectedToken === t.value
                   ? 'bg-indigo-600 text-white border-indigo-600'
-                  : 'border-slate-300 text-slate-600 hover:border-indigo-400'
+                  : 'border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-400 hover:border-indigo-400 dark:hover:border-indigo-500'
               }`}
             >
               {t.label}
@@ -267,7 +267,7 @@ export function SendForm() {
             className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors disabled:opacity-50 ${
               selectedToken === '__custom__'
                 ? 'bg-indigo-600 text-white border-indigo-600'
-                : 'border-slate-300 text-slate-600 hover:border-indigo-400'
+                : 'border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-400 hover:border-indigo-400 dark:hover:border-indigo-500'
             }`}
           >
             Other ERC20
@@ -290,7 +290,7 @@ export function SendForm() {
 
       {/* Recipient */}
       <div className="space-y-1">
-        <label className="text-sm font-medium text-slate-700">Recipient Address</label>
+        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Recipient Address</label>
         <Input
           placeholder="0xFd71..."
           value={recipient}
@@ -302,8 +302,8 @@ export function SendForm() {
 
       {/* Amount */}
       <div className="space-y-1">
-        <label className="text-sm font-medium text-slate-700">
-          Amount <span className="font-normal text-slate-400">({tokenLabel})</span>
+        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+          Amount <span className="font-normal text-slate-400 dark:text-slate-500">({tokenLabel})</span>
         </label>
         <Input
           type="number"
@@ -325,7 +325,7 @@ export function SendForm() {
 
       {/* Error message */}
       {step === 'error' && error && (
-        <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+        <div className="rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 p-3 text-sm text-red-700 dark:text-red-400">
           {error}
         </div>
       )}
@@ -345,7 +345,7 @@ export function SendForm() {
               type="button"
               onClick={reset}
               disabled={step === 'sending'}
-              className="px-4 py-2 border border-slate-300 text-slate-700 rounded hover:bg-slate-50 text-sm disabled:opacity-50"
+              className="px-4 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 bg-transparent rounded hover:bg-slate-50 dark:hover:bg-gray-800 text-sm disabled:opacity-50"
             >
               Edit
             </button>

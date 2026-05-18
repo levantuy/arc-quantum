@@ -91,7 +91,7 @@ export const BridgeTransactionDetail: React.FC<BridgeTransactionDetailProps> = (
 
   if (loading) {
     return (
-      <div className="p-6 bg-white border border-gray-200 rounded-lg shadow space-y-4">
+      <div className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow space-y-4">
         <Skeleton className="h-8 w-1/3" />
         <Skeleton className="h-12" />
         <Skeleton className="h-12" />
@@ -101,16 +101,16 @@ export const BridgeTransactionDetail: React.FC<BridgeTransactionDetailProps> = (
 
   if (error) {
     return (
-      <div className="p-6 bg-red-50 border border-red-200 rounded-lg">
-        <p className="text-red-800">{error}</p>
+      <div className="p-6 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-lg">
+        <p className="text-red-800 dark:text-red-300">{error}</p>
       </div>
     );
   }
 
   if (!transaction) {
     return (
-      <div className="p-6 bg-gray-50 border border-gray-200 rounded-lg">
-        <p className="text-gray-500">Transaction not found</p>
+      <div className="p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+        <p className="text-gray-500 dark:text-gray-400">Transaction not found</p>
       </div>
     );
   }
@@ -118,16 +118,16 @@ export const BridgeTransactionDetail: React.FC<BridgeTransactionDetailProps> = (
   return (
     <div className="space-y-6">
       {/* Transaction Overview */}
-      <div className="p-6 bg-white border border-gray-200 rounded-lg shadow">
+      <div className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow">
         <div className="flex items-start justify-between mb-4">
-          <h2 className="text-xl font-bold">Transaction #{transaction.id}</h2>
+          <h2 className="text-xl font-bold dark:text-gray-100">Transaction #{transaction.id}</h2>
           <span
             className={`px-3 py-1 rounded-full text-sm font-semibold ${
               transaction.status === 'success'
-                ? 'bg-green-100 text-green-800'
+                ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
                 : transaction.status === 'failed'
-                ? 'bg-red-100 text-red-800'
-                : 'bg-yellow-100 text-yellow-800'
+                ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
+                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'
             }`}
           >
             {transaction.status.toUpperCase()}
@@ -136,11 +136,11 @@ export const BridgeTransactionDetail: React.FC<BridgeTransactionDetailProps> = (
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
-            <p className="text-sm text-gray-500">Amount</p>
-            <p className="text-lg font-semibold">{transaction.amount}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Amount</p>
+            <p className="text-lg font-semibold dark:text-gray-100">{transaction.amount}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">Created</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Created</p>
             <p className="text-sm">
               {new Date(transaction.createdAt).toLocaleString()}
             </p>
@@ -148,26 +148,26 @@ export const BridgeTransactionDetail: React.FC<BridgeTransactionDetailProps> = (
         </div>
 
         {transaction.errorMessage && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg mb-4">
-            <p className="text-sm text-red-800">
+          <div className="p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-lg mb-4">
+            <p className="text-sm text-red-800 dark:text-red-300">
               <span className="font-semibold">Error:</span> {transaction.errorMessage}
             </p>
           </div>
         )}
 
         {transaction.status === 'failed' && (
-          <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
+          <div className="p-3 bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 rounded-lg text-sm text-yellow-800 dark:text-yellow-300">
             Please re-initiate this bridge from the Bridge form. Server-side retry is disabled in App Kit frontend mode.
           </div>
         )}
       </div>
 
       {/* Processing Steps/Logs */}
-      <div className="p-6 bg-white border border-gray-200 rounded-lg shadow">
-        <h3 className="text-lg font-bold mb-6">Processing Steps</h3>
+      <div className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow">
+        <h3 className="text-lg font-bold dark:text-gray-100 mb-6">Processing Steps</h3>
 
         {logs.length === 0 ? (
-          <p className="text-gray-500 text-center py-4">No processing logs available yet</p>
+          <p className="text-gray-500 dark:text-gray-400 text-center py-4">No processing logs available yet</p>
         ) : (
           <div className="space-y-4">
             {logs.map((log, index) => (
@@ -184,7 +184,7 @@ export const BridgeTransactionDetail: React.FC<BridgeTransactionDetailProps> = (
                     }`}
                   ></div>
                   {index < logs.length - 1 && (
-                    <div className="w-0.5 h-12 bg-gray-300 my-2"></div>
+                    <div className="w-0.5 h-12 bg-gray-300 dark:bg-gray-600 my-2"></div>
                   )}
                 </div>
 
@@ -193,16 +193,16 @@ export const BridgeTransactionDetail: React.FC<BridgeTransactionDetailProps> = (
                   <p className={`font-semibold ${STEP_COLORS[log.step] || 'text-gray-800'}`}>
                     {STEP_DESCRIPTIONS[log.step] || log.step}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     {new Date(log.createdAt).toLocaleTimeString()}
                   </p>
 
                   {log.detail && Object.keys(log.detail).length > 0 && (
                     <details className="mt-2 text-sm">
-                      <summary className="cursor-pointer text-blue-600 hover:text-blue-800">
+                      <summary className="cursor-pointer text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
                         View details
                       </summary>
-                      <pre className="mt-2 p-2 bg-gray-50 rounded text-xs overflow-auto max-h-32">
+                      <pre className="mt-2 p-2 bg-gray-50 dark:bg-gray-800 rounded text-xs overflow-auto max-h-32 dark:text-gray-300">
                         {JSON.stringify(log.detail, null, 2)}
                       </pre>
                     </details>

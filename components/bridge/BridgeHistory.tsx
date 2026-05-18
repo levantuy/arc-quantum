@@ -109,17 +109,17 @@ export const BridgeHistory: React.FC<BridgeHistoryProps> = ({
 
   const getStatusBadgeColor = (status: string) => {
     const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      success: 'bg-green-100 text-green-800',
-      failed: 'bg-red-100 text-red-800',
+      pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300',
+      success: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
+      failed: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
     };
-    return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
+    return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
   };
 
   if (!connected) {
     return (
-      <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
-        <p className="text-yellow-800">Please connect your wallet to view transaction history.</p>
+      <div className="p-6 bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 rounded-lg text-center">
+        <p className="text-yellow-800 dark:text-yellow-300">Please connect your wallet to view transaction history.</p>
       </div>
     );
   }
@@ -128,10 +128,10 @@ export const BridgeHistory: React.FC<BridgeHistoryProps> = ({
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
       {/* History List */}
       <div className="lg:col-span-2">
-        <div className="bg-white border border-gray-200 rounded-lg shadow overflow-hidden">
-          <div className="p-4 bg-gray-50 border-b">
-            <h3 className="font-semibold text-gray-700">Bridge History</h3>
-            <p className="text-xs text-gray-500 mt-1">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow overflow-hidden">
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 border-b dark:border-gray-700">
+            <h3 className="font-semibold text-gray-700 dark:text-gray-300">Bridge History</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               {totalTransactions} transaction(s)
             </p>
           </div>
@@ -146,7 +146,7 @@ export const BridgeHistory: React.FC<BridgeHistoryProps> = ({
             ) : error ? (
               <div className="p-4 text-red-600 text-sm">{error}</div>
             ) : transactions.length === 0 ? (
-              <div className="p-4 text-gray-500 text-sm text-center">
+              <div className="p-4 text-gray-500 dark:text-gray-400 text-sm text-center">
                 No bridge transactions yet
               </div>
             ) : (
@@ -154,16 +154,16 @@ export const BridgeHistory: React.FC<BridgeHistoryProps> = ({
                 <button
                   key={tx.id}
                   onClick={() => handleTransactionClick(tx.id)}
-                  className={`w-full p-4 text-left hover:bg-gray-50 transition ${
-                    selectedTransaction?.id === tx.id ? 'bg-blue-50' : ''
+                  className={`w-full p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition ${
+                    selectedTransaction?.id === tx.id ? 'bg-blue-50 dark:bg-blue-950/30' : ''
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-800 truncate">
+                      <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate">
                         {getChainName(tx.fromChainId)} → {getChainName(tx.toChainId)}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         {new Date(tx.createdAt).toLocaleDateString()}
                       </p>
                     </div>
@@ -180,21 +180,21 @@ export const BridgeHistory: React.FC<BridgeHistoryProps> = ({
             )}
           </div>
 
-          <div className="p-3 border-t bg-gray-50 flex items-center justify-between">
+          <div className="p-3 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex items-center justify-between">
             <button
               onClick={handlePreviousPage}
               disabled={!canGoPrevious || loading}
-              className="px-3 py-1.5 text-sm rounded border border-gray-300 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white transition"
+              className="px-3 py-1.5 text-sm rounded border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white dark:hover:bg-gray-700 transition"
             >
               Previous
             </button>
-            <span className="text-xs text-gray-600">
+            <span className="text-xs text-gray-600 dark:text-gray-400">
               Page {Math.min(currentPage, totalPages)} / {totalPages}
             </span>
             <button
               onClick={handleNextPage}
               disabled={!canGoNext || loading}
-              className="px-3 py-1.5 text-sm rounded border border-gray-300 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white transition"
+              className="px-3 py-1.5 text-sm rounded border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white dark:hover:bg-gray-700 transition"
             >
               Next
             </button>

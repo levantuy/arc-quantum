@@ -403,29 +403,29 @@ export const BridgeForm: React.FC<BridgeFormProps> = ({ onTransferSuccess }) => 
 
   if (!connected) {
     return (
-      <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
-        <p className="text-yellow-800">Please connect your wallet to use the bridge.</p>
+      <div className="p-6 bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 rounded-lg text-center">
+        <p className="text-yellow-800 dark:text-yellow-300">Please connect your wallet to use the bridge.</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 bg-white border border-gray-200 rounded-lg shadow">
-      <h2 className="text-2xl font-bold mb-6">Bridge Tokens</h2>
+    <div className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow">
+      <h2 className="text-2xl font-bold dark:text-gray-100 mb-6">Bridge Tokens</h2>
       
       <form onSubmit={handleSubmit} className="space-y-4">
 
         <div className="flex items-end gap-2">
           {/* From Chain */}
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               From Chain
             </label>
             <select
               name="fromChainId"
               value={formData.fromChainId}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
               {BRIDGE_SUPPORTED_CHAINS.map((chain) => (
                 <option
@@ -443,7 +443,7 @@ export const BridgeForm: React.FC<BridgeFormProps> = ({ onTransferSuccess }) => 
           <button
             type="button"
             aria-label="Swap chains"
-            className="mb-6 p-2 rounded-full border border-gray-300 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mb-6 p-2 rounded-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={() => {
               setFormData((prev) => ({
                 ...prev,
@@ -460,14 +460,14 @@ export const BridgeForm: React.FC<BridgeFormProps> = ({ onTransferSuccess }) => 
 
           {/* To Chain */}
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               To Chain
             </label>
             <select
               name="toChainId"
               value={formData.toChainId}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
               {BRIDGE_SUPPORTED_CHAINS.map((chain) => (
                 <option
@@ -484,14 +484,14 @@ export const BridgeForm: React.FC<BridgeFormProps> = ({ onTransferSuccess }) => 
 
         {/* Token */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Token
           </label>
           <select
             name="tokenSymbol"
             value={formData.tokenSymbol}
             onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
           >
             {BRIDGE_TOKEN_OPTIONS.filter((token) => token === 'USDC').map((token) => (
               <option key={token} value={token}>
@@ -503,7 +503,7 @@ export const BridgeForm: React.FC<BridgeFormProps> = ({ onTransferSuccess }) => 
 
         {/* Amount */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Amount
           </label>
           <Input

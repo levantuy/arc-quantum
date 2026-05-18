@@ -16,10 +16,10 @@ const PENDING_STATUSES = new Set(['confirming', 'pending']);
 // -- Helpers ------------------------------------------------------------------
 
 const STATUS_BADGE: Record<string, string> = {
-  confirming: 'bg-blue-100 text-blue-700',
-  pending:    'bg-yellow-100 text-yellow-700',
-  success:    'bg-emerald-100 text-emerald-700',
-  failed:     'bg-red-100 text-red-700',
+  confirming: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
+  pending:    'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300',
+  success:    'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+  failed:     'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -162,7 +162,7 @@ export function SendHistory() {
 
   if (!connected) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 text-center text-sm text-slate-500">
+      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-gray-800 p-6 text-center text-sm text-slate-500 dark:text-slate-400">
         Connect your wallet to view send history.
       </div>
     );
@@ -184,11 +184,11 @@ export function SendHistory() {
 
   if (error) {
     return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 flex justify-between items-center">
+      <div className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40 p-4 text-sm text-red-700 dark:text-red-400 flex justify-between items-center">
         <span>{error}</span>
         <button
           onClick={() => fetchHistory(currentPage)}
-          className="ml-4 underline text-red-600 hover:text-red-800"
+          className="ml-4 underline text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
         >
           Retry
         </button>
@@ -200,7 +200,7 @@ export function SendHistory() {
 
   if (!loading && transactions.length === 0) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 text-center text-sm text-slate-500">
+      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-gray-800 p-6 text-center text-sm text-slate-500 dark:text-slate-400">
         No send transactions yet.
       </div>
     );
@@ -217,7 +217,7 @@ export function SendHistory() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-400 dark:text-slate-500">
             {total} transaction{total !== 1 ? 's' : ''}
           </p>
           {pendingCount > 0 && (
@@ -237,19 +237,19 @@ export function SendHistory() {
       </div>
 
       {/* Transaction rows */}
-      <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden bg-white">
+      <div className="divide-y divide-slate-100 dark:divide-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-white dark:bg-gray-900">
         {transactions.map((tx) => (
-          <div key={tx.hash} className="p-4 hover:bg-slate-50 transition">
+          <div key={tx.hash} className="p-4 hover:bg-slate-50 dark:hover:bg-gray-800 transition">
             <div className="flex items-start justify-between gap-3">
               {/* Left: hash + to */}
               <div className="min-w-0 flex-1">
-                <p className="font-mono text-sm text-slate-800 truncate">
+                <p className="font-mono text-sm text-slate-800 dark:text-slate-200 truncate">
                   {shortHash(tx.hash)}
                 </p>
-                <p className="text-xs text-slate-500 mt-0.5 truncate">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                   To: {tx.to}
                 </p>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
                   {new Date(tx.createdAt).toLocaleString()}
                 </p>
                 {tx.confirmedAt && tx.status === 'success' && (
@@ -261,7 +261,7 @@ export function SendHistory() {
 
               {/* Right: amount + status */}
               <div className="flex flex-col items-end gap-1 shrink-0">
-                <span className="text-sm font-semibold text-slate-900">
+                <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   {formatAmount(tx.amount, tx.tokenIn)}
                 </span>
                 <span
@@ -301,17 +301,17 @@ export function SendHistory() {
           <button
             onClick={() => setCurrentPage((p) => p - 1)}
             disabled={!canGoPrev || loading}
-            className="px-3 py-1 border border-slate-200 rounded hover:bg-slate-50 disabled:opacity-40 text-slate-600"
+            className="px-3 py-1 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-50 dark:hover:bg-gray-800 disabled:opacity-40 text-slate-600 dark:text-slate-400"
           >
             &larr; Prev
           </button>
-          <span className="text-slate-500 text-xs">
+          <span className="text-slate-500 dark:text-slate-400 text-xs">
             Page {currentPage} / {totalPages}
           </span>
           <button
             onClick={() => setCurrentPage((p) => p + 1)}
             disabled={!canGoNext || loading}
-            className="px-3 py-1 border border-slate-200 rounded hover:bg-slate-50 disabled:opacity-40 text-slate-600"
+            className="px-3 py-1 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-50 dark:hover:bg-gray-800 disabled:opacity-40 text-slate-600 dark:text-slate-400"
           >
             Next &rarr;
           </button>

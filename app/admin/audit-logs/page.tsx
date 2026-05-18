@@ -5,7 +5,7 @@ export default function AdminAuditLogsPage() {
     <div className="space-y-4">
       <div>
         <h2 className="text-xl font-semibold">Admin Audit Logs</h2>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           Review login events and configuration changes performed by administrators.
         </p>
       </div>

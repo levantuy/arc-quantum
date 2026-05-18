@@ -32,10 +32,10 @@ export const AdminPanel = ({ address, onLoggedOut }: AdminPanelProps) => {
 
   return (
     <div className="space-y-4">
-      <div className="rounded border bg-white p-4 flex items-center justify-between">
+      <div className="rounded border dark:border-gray-700 bg-white dark:bg-gray-900 p-4 flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold">Admin Dashboard</h2>
-          <p className="text-sm text-gray-600">Signed in as {address}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Signed in as {address}</p>
         </div>
         <Button type="button" onClick={handleLogout} disabled={loggingOut}>
           {loggingOut ? 'Logging out...' : 'Logout'}
@@ -45,29 +45,29 @@ export const AdminPanel = ({ address, onLoggedOut }: AdminPanelProps) => {
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Link href="/admin/tokens" className="rounded border bg-white p-4 hover:border-blue-500 transition">
-          <h3 className="text-lg font-semibold">Token Config</h3>
-          <p className="text-sm text-gray-600 mt-1">
+        <Link href="/admin/tokens" className="rounded border dark:border-gray-700 bg-white dark:bg-gray-900 p-4 hover:border-blue-500 transition">
+          <h3 className="text-lg font-semibold dark:text-gray-100">Token Config</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             Add, update, or disable supported tokens across chains.
           </p>
         </Link>
 
         <Link
           href="/admin/bridge-config"
-          className="rounded border bg-white p-4 hover:border-blue-500 transition"
+          className="rounded border dark:border-gray-700 bg-white dark:bg-gray-900 p-4 hover:border-blue-500 transition"
         >
-          <h3 className="text-lg font-semibold">Bridge Config</h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <h3 className="text-lg font-semibold dark:text-gray-100">Bridge Config</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             Manage chain pairs, min/max limits, and bridge fee rules.
           </p>
         </Link>
 
         <Link
           href="/admin/audit-logs"
-          className="rounded border bg-white p-4 hover:border-blue-500 transition"
+          className="rounded border dark:border-gray-700 bg-white dark:bg-gray-900 p-4 hover:border-blue-500 transition"
         >
-          <h3 className="text-lg font-semibold">Audit Logs</h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <h3 className="text-lg font-semibold dark:text-gray-100">Audit Logs</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             Inspect admin login attempts and all configuration changes.
           </p>
         </Link>

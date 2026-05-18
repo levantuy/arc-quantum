@@ -84,7 +84,7 @@ export const BridgeConfigForm = () => {
   };
 
   return (
-    <div className="space-y-4 rounded border p-4 bg-white">
+    <div className="space-y-4 rounded border dark:border-gray-700 p-4 bg-white dark:bg-gray-900">
       <h3 className="text-lg font-semibold">Bridge Config</h3>
 
       <form className="space-y-3" onSubmit={onSubmit}>
@@ -132,7 +132,7 @@ export const BridgeConfigForm = () => {
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
-      {loading && <p className="text-sm text-gray-600">Loading...</p>}
+      {loading && <p className="text-sm text-gray-600 dark:text-gray-400">Loading...</p>}
 
       <div className="space-y-2">
         {items.map((item) => (

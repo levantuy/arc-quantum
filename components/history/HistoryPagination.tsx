@@ -41,7 +41,7 @@ export const HistoryPagination: React.FC<HistoryPaginationProps> = ({
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-sm">
-      <span className="text-xs text-slate-400">
+      <span className="text-xs text-slate-400 dark:text-slate-500">
         Showing {startItem}–{endItem} of {totalItems}
       </span>
 
@@ -49,7 +49,7 @@ export const HistoryPagination: React.FC<HistoryPaginationProps> = ({
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
-          className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 transition-colors hover:bg-slate-50 dark:hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
           aria-label="Previous page"
         >
           ‹
@@ -57,7 +57,7 @@ export const HistoryPagination: React.FC<HistoryPaginationProps> = ({
 
         {pageNumbers.map((n, i) =>
           n === '…' ? (
-            <span key={`ellipsis-${i}`} className="px-1 text-slate-400">
+            <span key={`ellipsis-${i}`} className="px-1 text-slate-400 dark:text-slate-500">
               …
             </span>
           ) : (
@@ -66,8 +66,8 @@ export const HistoryPagination: React.FC<HistoryPaginationProps> = ({
               onClick={() => onPageChange(n as number)}
               className={`flex h-8 w-8 items-center justify-center rounded-lg border text-sm font-medium transition-colors ${
                 n === page
-                  ? 'border-amber-400 bg-amber-50 text-amber-700'
-                  : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'border-amber-400 bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400'
+                  : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-gray-800'
               }`}
             >
               {n}
@@ -78,7 +78,7 @@ export const HistoryPagination: React.FC<HistoryPaginationProps> = ({
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages}
-          className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 transition-colors hover:bg-slate-50 dark:hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
           aria-label="Next page"
         >
           ›

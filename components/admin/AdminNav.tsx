@@ -14,7 +14,7 @@ export function AdminNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="rounded border bg-white p-3">
+    <nav className="rounded border bg-white dark:bg-gray-900 dark:border-gray-700 p-3">
       <ul className="flex flex-wrap gap-2 text-sm">
         {links.map((link) => {
           const isActive =
@@ -28,7 +28,7 @@ export function AdminNav() {
                 className={`inline-flex rounded px-3 py-1.5 transition ${
                   isActive
                     ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
                 {link.label}

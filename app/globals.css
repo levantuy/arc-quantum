@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
+/* Enable class-based dark mode: html.dark activates all dark: variants */
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   --color-primary: #1f2937;
   --color-primary-light: #6b7280;

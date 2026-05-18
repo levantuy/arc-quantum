@@ -102,7 +102,7 @@ export default function AdminDashboardPage() {
   };
 
   if (sessionLoading) {
-    return <p className="text-sm text-gray-600">Loading admin session...</p>;
+    return <p className="text-sm text-gray-600 dark:text-gray-400">Loading admin session...</p>;
   }
 
   if (session.authenticated && session.admin) {
@@ -111,9 +111,9 @@ export default function AdminDashboardPage() {
 
   if (!connected || !address) {
     return (
-      <div className="max-w-sm mx-auto mt-12 p-6 bg-white rounded shadow text-center space-y-3">
+      <div className="max-w-sm mx-auto mt-12 p-6 bg-white dark:bg-gray-900 rounded shadow text-center space-y-3">
         <h2 className="text-xl font-semibold">Admin Access</h2>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           Connect your wallet using the button in the top-right corner, then return here to authenticate as admin.
         </p>
       </div>
@@ -121,12 +121,12 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="max-w-sm mx-auto mt-12 p-6 bg-white rounded shadow space-y-4">
+    <div className="max-w-sm mx-auto mt-12 p-6 bg-white dark:bg-gray-900 rounded shadow space-y-4">
       <h2 className="text-xl font-semibold">Admin Authentication</h2>
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-gray-600 dark:text-gray-400">
         Wallet connected: <span className="font-mono">{address}</span>
       </p>
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-gray-600 dark:text-gray-400">
         Sign a challenge message with your admin wallet to verify access.
       </p>
       {error && <p className="text-sm text-red-600">{error}</p>}

@@ -450,13 +450,13 @@ export function SwapExperience() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-transparent p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-6">
-          <h2 className="text-3xl font-bold text-gray-900">Swap</h2>
-          <p className="text-gray-600 mt-2">Swap stablecoins on Arc Testnet with live quotes</p>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Swap</h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">Swap stablecoins on Arc Testnet with live quotes</p>
           {!PUBLIC_ARC_KIT_KEY ? (
-            <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
+            <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 rounded-lg text-sm text-yellow-800 dark:text-yellow-300">
               Configure NEXT_PUBLIC_ARC_KIT_KEY so Arc App Kit can create quotes and swaps.
             </div>
           ) : null}
@@ -464,10 +464,10 @@ export function SwapExperience() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6">
           {/* Swap Form Card */}
-          <div className="bg-white border border-gray-200 rounded-lg shadow p-6">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow p-6">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-xl font-bold text-gray-900">Swap tokens</h3>
-              <span className="px-2.5 py-1 bg-teal-50 text-teal-700 rounded-lg text-sm font-semibold">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">Swap tokens</h3>
+              <span className="px-2.5 py-1 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-lg text-sm font-semibold">
                 {amount || '0'} {fromToken}
               </span>
             </div>
@@ -475,17 +475,17 @@ export function SwapExperience() {
             {/* From token */}
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
-                <label htmlFor="from-token" className="text-sm font-medium text-gray-700">
+                <label htmlFor="from-token" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   From token
                 </label>
-                <span className="text-sm text-gray-500">{TOKEN_META[fromToken].name}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{TOKEN_META[fromToken].name}</span>
               </div>
               <div className="flex gap-2">
                 <select
                   id="from-token"
                   value={fromToken}
                   onChange={(event) => setFromToken(event.target.value as SwapTokenSymbol)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900"
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
                   {ARC_SWAP_TOKENS.map((token) => (
                     <option key={token} value={token}>
@@ -501,14 +501,14 @@ export function SwapExperience() {
                   value={amount}
                   onChange={(event) => setAmount(event.target.value)}
                   placeholder="1.00"
-                  className="w-36 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900"
+                  className="w-36 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 />
               </div>
             </div>
 
             {/* Flip row */}
             <div className="flex items-center justify-between my-3">
-              <span className="text-xs text-gray-500 bg-teal-50 text-teal-700 px-2.5 py-1 rounded-full">
+              <span className="text-xs text-gray-500 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 px-2.5 py-1 rounded-full">
                 Route: Arc Stablecoin Service
               </span>
               <button
@@ -518,7 +518,7 @@ export function SwapExperience() {
                   setFromToken(toToken);
                   setToToken(fromToken);
                 }}
-                className="p-1.5 rounded-full border border-gray-300 bg-gray-50 hover:bg-gray-100 transition cursor-pointer"
+                className="p-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition cursor-pointer"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
                   <path stroke="#0f8a7b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4" />
@@ -529,17 +529,17 @@ export function SwapExperience() {
             {/* To token */}
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
-                <label htmlFor="to-token" className="text-sm font-medium text-gray-700">
+                <label htmlFor="to-token" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   To token
                 </label>
-                <span className="text-sm text-gray-500">{TOKEN_META[toToken].name}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{TOKEN_META[toToken].name}</span>
               </div>
               <div className="flex gap-2">
                 <select
                   id="to-token"
                   value={toToken}
                   onChange={(event) => setToToken(event.target.value as SwapTokenSymbol)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900"
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
                   {ARC_SWAP_TOKENS.filter((token) => token !== fromToken).map((token) => (
                     <option key={token} value={token}>
@@ -547,19 +547,19 @@ export function SwapExperience() {
                     </option>
                   ))}
                 </select>
-                <div className="w-36 flex items-center px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-900 font-semibold">
+                <div className="w-36 flex items-center px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-semibold">
                   {quoteLoading ? 'Fetching...' : `${formatAmount(quote.estimatedOutput)} ${toToken}`}
                 </div>
               </div>
             </div>
 
             {/* Slippage */}
-            <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 mb-4">
+            <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 mb-4">
               <div className="flex items-center justify-between mb-2">
-                <label htmlFor="slippage-input" className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                <label htmlFor="slippage-input" className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
                   Slippage tolerance
                 </label>
-                <div className="flex gap-1 p-0.5 bg-gray-200 rounded-full">
+                <div className="flex gap-1 p-0.5 bg-gray-200 dark:bg-gray-700 rounded-full">
                   {['0.5', '1.0', '2.0'].map((preset) => (
                     <button
                       key={preset}
@@ -567,8 +567,8 @@ export function SwapExperience() {
                       onClick={() => setSlippage(preset)}
                       className={`px-2.5 py-1 rounded-full text-xs font-medium transition cursor-pointer border-0 ${
                         preset === slippage
-                          ? 'bg-white text-gray-900 shadow'
-                          : 'bg-transparent text-gray-600 hover:text-gray-800'
+                          ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow'
+                          : 'bg-transparent text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
                       }`}
                     >
                       {preset}%
@@ -584,22 +584,22 @@ export function SwapExperience() {
                 step="0.1"
                 value={slippage}
                 onChange={(event) => setSlippage(event.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-900"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               />
             </div>
 
             {fromToken === toToken ? (
-              <p className="mb-3 p-2.5 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+              <p className="mb-3 p-2.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-700 dark:text-red-400">
                 From and to tokens must be different.
               </p>
             ) : null}
             {quote.error ? (
-              <p className="mb-3 p-2.5 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+              <p className="mb-3 p-2.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-700 dark:text-red-400">
                 {quote.error}
               </p>
             ) : null}
             {swapError ? (
-              <p className="mb-3 p-2.5 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+              <p className="mb-3 p-2.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-700 dark:text-red-400">
                 {swapError}
               </p>
             ) : null}
@@ -628,9 +628,9 @@ export function SwapExperience() {
           {/* Right column */}
           <div className="flex flex-col gap-4">
             {/* Quote details */}
-            <div className="bg-white border border-gray-200 rounded-lg shadow p-6">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-gray-900">Quote details</h3>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">Quote details</h3>
                 <span
                   className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     quoteLoading ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
@@ -641,26 +641,26 @@ export function SwapExperience() {
               </div>
               <dl className="grid grid-cols-2 gap-x-6 gap-y-4">
                 <div>
-                  <dt className="text-xs text-gray-500 uppercase tracking-wide">Expected output</dt>
-                  <dd className="mt-1 text-sm font-semibold text-gray-900">
+                  <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Expected output</dt>
+                  <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                     {formatAmount(quote.estimatedOutput)} {toToken}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs text-gray-500 uppercase tracking-wide">Minimum received</dt>
-                  <dd className="mt-1 text-sm font-semibold text-gray-900">
+                  <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Minimum received</dt>
+                  <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                     {formatAmount(quote.minimumReceived)} {toToken}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs text-gray-500 uppercase tracking-wide">Slippage</dt>
-                  <dd className="mt-1 text-sm font-semibold text-gray-900">
+                  <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Slippage</dt>
+                  <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                     {slippage}% ({slippageBps} bps)
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs text-gray-500 uppercase tracking-wide">Fees</dt>
-                  <dd className="mt-1 text-sm font-semibold text-gray-900">{totalFeeText}</dd>
+                  <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Fees</dt>
+                  <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">{totalFeeText}</dd>
                 </div>
               </dl>
             </div>
@@ -707,48 +707,48 @@ export function SwapExperience() {
             ) : null}
 
             {/* Swap history */}
-            <div className="bg-white border border-gray-200 rounded-lg shadow p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Swap history</h3>
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow p-6">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Swap history</h3>
 
               {walletAddress ? (
                 <>
                   {historyLoading ? (
-                    <p className="text-sm text-gray-500 py-2">Loading...</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 py-2">Loading...</p>
                   ) : historyError ? (
-                    <p className="text-sm text-red-600 py-2">{historyError}</p>
+                    <p className="text-sm text-red-600 dark:text-red-400 py-2">{historyError}</p>
                   ) : history.length > 0 ? (
                     <>
-                      <p className="text-xs text-gray-400 mb-2">{totalTransactions} transaction(s)</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 mb-2">{totalTransactions} transaction(s)</p>
                       <div className="space-y-2 max-h-64 overflow-y-auto">
                         {history.map((item) => (
-                          <div key={item.hash} className="p-3 rounded-lg border border-gray-100 bg-gray-50">
+                          <div key={item.hash} className="p-3 rounded-lg border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
                             <div className="flex items-center justify-between">
-                              <strong className="text-sm text-gray-900">
+                              <strong className="text-sm text-gray-900 dark:text-gray-100">
                                 {item.tokenIn} {'\u2192'} {item.tokenOut}
                               </strong>
                               <span
                                 className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                                   item.status === 'success'
-                                    ? 'bg-green-100 text-green-800'
+                                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
                                     : item.status === 'failed'
-                                      ? 'bg-red-100 text-red-800'
-                                      : 'bg-yellow-100 text-yellow-800'
+                                      ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                                      : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
                                 }`}
                               >
                                 {statusLabel(item.status)}
                               </span>
                             </div>
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                               {item.amountIn ?? item.amount} {item.tokenIn} → {item.amountOut ?? '--'} {item.tokenOut}
                             </p>
-                            <div className="flex items-center justify-between mt-1.5 text-xs text-gray-400">
+                            <div className="flex items-center justify-between mt-1.5 text-xs text-gray-400 dark:text-gray-500">
                               <span>{new Date(item.createdAt).toLocaleString('en-US')}</span>
                               {item.explorerUrl ? (
                                 <a
                                   href={item.explorerUrl}
                                   target="_blank"
                                   rel="noreferrer"
-                                  className="text-teal-600 hover:underline"
+                                  className="text-teal-600 dark:text-teal-400 hover:underline"
                                 >
                                   {shortenAddress(item.hash, 6)}
                                 </a>
@@ -759,32 +759,32 @@ export function SwapExperience() {
                           </div>
                         ))}
                       </div>
-                      <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-3">
+                      <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700 mt-3">
                         <button
                           onClick={handleHistoryPreviousPage}
                           disabled={!canGoPreviousPage || historyLoading}
-                          className="px-3 py-1 text-xs rounded-lg border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                          className="px-3 py-1 text-xs rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                         >
                           ← Prev
                         </button>
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-gray-400 dark:text-gray-500">
                           Page {Math.min(currentPage, totalPages)} / {totalPages}
                         </span>
                         <button
                           onClick={handleHistoryNextPage}
                           disabled={!canGoNextPage || historyLoading}
-                          className="px-3 py-1 text-xs rounded-lg border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                          className="px-3 py-1 text-xs rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                         >
                           Next →
                         </button>
                       </div>
                     </>
                   ) : (
-                    <p className="text-sm text-gray-500">No swap records yet.</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">No swap records yet.</p>
                   )}
                 </>
               ) : (
-                <p className="text-sm text-gray-500">Connect your wallet to load swap history.</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Connect your wallet to load swap history.</p>
               )}
             </div>
           </div>
@@ -798,34 +798,34 @@ export function SwapExperience() {
           role="presentation"
         >
           <div
-            className="w-full max-w-lg mt-3 max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white rounded-2xl shadow-xl p-6"
+            className="w-full max-w-lg mt-3 max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-6"
             role="dialog"
             aria-modal="true"
             aria-labelledby="swap-preview-title"
           >
             <div className="flex items-center justify-between mb-5">
-              <h2 id="swap-preview-title" className="text-xl font-bold text-gray-900">
+              <h2 id="swap-preview-title" className="text-xl font-bold text-gray-900 dark:text-gray-100">
                 Confirm swap
               </h2>
               <button
                 type="button"
                 onClick={() => setPreviewOpen(false)}
-                className="p-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition cursor-pointer border-0"
+                className="p-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer border-0"
               >
                 ✕
               </button>
             </div>
 
             <div className="grid grid-cols-2 gap-3 mb-5">
-              <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
-                <span className="text-xs text-gray-500">You send</span>
-                <strong className="block mt-1 text-lg text-gray-900">
+              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
+                <span className="text-xs text-gray-500 dark:text-gray-400">You send</span>
+                <strong className="block mt-1 text-lg text-gray-900 dark:text-gray-100">
                   {formatAmount(amount)} {fromToken}
                 </strong>
               </div>
-              <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
-                <span className="text-xs text-gray-500">You receive</span>
-                <strong className="block mt-1 text-lg text-gray-900">
+              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
+                <span className="text-xs text-gray-500 dark:text-gray-400">You receive</span>
+                <strong className="block mt-1 text-lg text-gray-900 dark:text-gray-100">
                   {formatAmount(quote.estimatedOutput)} {toToken}
                 </strong>
               </div>
@@ -833,24 +833,24 @@ export function SwapExperience() {
 
             <dl className="grid grid-cols-2 gap-x-6 gap-y-4 mb-5">
               <div>
-                <dt className="text-xs text-gray-500 uppercase tracking-wide">Wallet</dt>
-                <dd className="mt-1 text-sm font-semibold text-gray-900">
+                <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Wallet</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {walletAddress ? shortenAddress(walletAddress) : '--'}
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-gray-500 uppercase tracking-wide">Network</dt>
-                <dd className="mt-1 text-sm font-semibold text-gray-900">Arc Testnet</dd>
+                <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Network</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">Arc Testnet</dd>
               </div>
               <div>
-                <dt className="text-xs text-gray-500 uppercase tracking-wide">Minimum received</dt>
-                <dd className="mt-1 text-sm font-semibold text-gray-900">
+                <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Minimum received</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {formatAmount(quote.minimumReceived)} {toToken}
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-gray-500 uppercase tracking-wide">Fees</dt>
-                <dd className="mt-1 text-sm font-semibold text-gray-900">{totalFeeText}</dd>
+                <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Fees</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">{totalFeeText}</dd>
               </div>
             </dl>
 

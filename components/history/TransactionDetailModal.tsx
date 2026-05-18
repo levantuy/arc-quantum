@@ -12,11 +12,11 @@ interface TransactionDetailModalProps {
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-0.5 border-b border-slate-100 py-2.5 last:border-0 sm:flex-row sm:items-center sm:justify-between">
-      <span className="w-36 shrink-0 text-xs font-semibold uppercase tracking-wide text-slate-400">
+    <div className="flex flex-col gap-0.5 border-b border-slate-100 dark:border-slate-800 py-2.5 last:border-0 sm:flex-row sm:items-center sm:justify-between">
+      <span className="w-36 shrink-0 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
         {label}
       </span>
-      <span className="break-all text-sm text-slate-800">{children}</span>
+      <span className="break-all text-sm text-slate-800 dark:text-slate-200">{children}</span>
     </div>
   );
 }
@@ -27,20 +27,20 @@ function HashLink({ hash, explorerBase }: { hash: string | null | undefined; exp
     ? `${explorerBase.replace(/\/$/, '')}/tx/${hash}`
     : null;
   return href ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="font-mono text-amber-600 underline hover:text-amber-700 break-all">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="font-mono text-amber-600 dark:text-amber-400 underline hover:text-amber-700 dark:hover:text-amber-300 break-all">
       {hash}
     </a>
   ) : (
-    <span className="font-mono text-slate-700 break-all">{hash}</span>
+    <span className="font-mono text-slate-700 dark:text-slate-300 break-all">{hash}</span>
   );
 }
 
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    confirming: 'bg-blue-50 text-blue-700 border-blue-200',
-    success: 'bg-green-50 text-green-700 border-green-200',
-    failed: 'bg-red-50 text-red-700 border-red-200',
+    pending: 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-800',
+    confirming: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800',
+    success: 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800',
+    failed: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800',
   };
   return (
     <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium capitalize ${map[status] ?? ''}`}>
@@ -80,17 +80,17 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({ 
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg rounded-2xl bg-white shadow-xl"
+        className="w-full max-w-lg rounded-2xl bg-white dark:bg-gray-900 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
-          <h2 className="text-base font-bold text-slate-900">
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 px-6 py-4">
+          <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
             {TYPE_TITLE[item.type] ?? 'Transaction Detail'}
           </h2>
           <button
             onClick={onClose}
-            className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+            className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-gray-800 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
             aria-label="Close"
           >
             ✕
@@ -98,7 +98,7 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({ 
         </div>
 
         {/* Body */}
-        <div className="divide-y divide-slate-100 px-6 py-2 max-h-[70vh] overflow-y-auto">
+        <div className="divide-y divide-slate-100 dark:divide-slate-800 px-6 py-2 max-h-[70vh] overflow-y-auto">
           <Row label="Type">
             <span className="capitalize font-medium">{item.type}</span>
           </Row>
@@ -170,16 +170,16 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({ 
           {/* Error message */}
           {item.errorMessage && (
             <Row label="Error">
-              <span className="text-red-600">{item.errorMessage}</span>
+              <span className="text-red-600 dark:text-red-400">{item.errorMessage}</span>
             </Row>
           )}
         </div>
 
         {/* Footer */}
-        <div className="border-t border-slate-100 px-6 py-4">
+        <div className="border-t border-slate-100 dark:border-slate-800 px-6 py-4">
           <button
             onClick={onClose}
-            className="w-full rounded-xl bg-slate-100 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200 transition-colors"
+            className="w-full rounded-xl bg-slate-100 dark:bg-gray-800 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors"
           >
             Close
           </button>

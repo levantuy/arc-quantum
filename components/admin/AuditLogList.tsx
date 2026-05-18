@@ -47,7 +47,7 @@ export const AuditLogList = ({ title = 'Audit Logs', autoLoad = false }: AuditLo
   }, [autoLoad]);
 
   return (
-    <div className="space-y-3 rounded border p-4 bg-white">
+    <div className="space-y-3 rounded border dark:border-gray-700 p-4 bg-white dark:bg-gray-900">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">{title}</h3>
         <Button type="button" onClick={loadLogs} disabled={loading}>
@@ -56,15 +56,15 @@ export const AuditLogList = ({ title = 'Audit Logs', autoLoad = false }: AuditLo
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
-      {loading && <p className="text-sm text-gray-600">Loading...</p>}
+      {loading && <p className="text-sm text-gray-600 dark:text-gray-400">Loading...</p>}
 
       <div className="max-h-64 overflow-auto space-y-2">
         {logs.map((log) => (
           <div key={log.id} className="rounded border p-3 text-sm">
             <p className="font-medium">{log.action}</p>
-            <p className="text-gray-600">{log.detail || '-'}</p>
-            <p className="text-gray-500">{log.adminAddress}</p>
-            <p className="text-gray-400">{new Date(log.createdAt).toLocaleString()}</p>
+            <p className="text-gray-600 dark:text-gray-400">{log.detail || '-'}</p>
+            <p className="text-gray-500 dark:text-gray-500">{log.adminAddress}</p>
+            <p className="text-gray-400 dark:text-gray-500">{new Date(log.createdAt).toLocaleString()}</p>
           </div>
         ))}
       </div>
