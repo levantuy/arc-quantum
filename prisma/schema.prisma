@@ -1,5 +1,3 @@
-// Prisma schema for Arc Quantum DeFi App
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,36 +8,37 @@ datasource db {
 }
 
 model User {
-  id        BigInt   @id @default(autoincrement())
-  address   String   @unique
-  isAdmin   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  transactions Transaction[]
+  id            BigInt         @id @default(autoincrement())
+  address       String         @unique
+  isAdmin       Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  adminNonces   AdminNonce[]
   adminSessions AdminSession[]
-  adminNonces AdminNonce[]
-  auditLogs   AuditLog[]
+  auditLogs     AuditLog[]
+  transactions  Transaction[]
 }
 
 model Transaction {
   id           BigInt   @id @default(autoincrement())
   hash         String   @unique
-  txType       String   @default("unknown")
   from         String
   to           String
   amount       String
+  status       String
+  userId       BigInt?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  txType       String   @default("unknown")
   amountIn     String?
   amountOut    String?
   tokenIn      String?
   tokenOut     String?
   chainId      Int?
-  status       String
   explorerUrl  String?
   errorMessage String?
+  confirmedAt  DateTime?
   user         User?    @relation(fields: [userId], references: [id])
-  userId       BigInt?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
 
   @@index([from, createdAt(sort: Desc)])
   @@index([txType, createdAt(sort: Desc)])
@@ -75,58 +74,58 @@ model BridgeConfig {
 }
 
 model AuditLog {
-  id          BigInt   @id @default(autoincrement())
-  action      String
-  detail      String?
-  oldData     String?
-  newData     String?
-  admin       User?    @relation(fields: [adminId], references: [id])
-  adminId     BigInt?
+  id           BigInt   @id @default(autoincrement())
+  action       String
+  detail       String?
+  oldData      String?
+  newData      String?
+  adminId      BigInt?
   adminAddress String
-  createdAt   DateTime @default(now())
+  createdAt    DateTime @default(now())
+  admin        User?    @relation(fields: [adminId], references: [id])
 }
 
 model AdminNonce {
-  id        BigInt   @id @default(autoincrement())
-  user      User?    @relation(fields: [userId], references: [id])
+  id        BigInt    @id @default(autoincrement())
   userId    BigInt?
   address   String
   nonce     String
   expiresAt DateTime
   usedAt    DateTime?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
+  user      User?     @relation(fields: [userId], references: [id])
 
   @@index([address, nonce])
   @@index([expiresAt])
 }
 
 model AdminSession {
-  id          BigInt   @id @default(autoincrement())
-  user        User     @relation(fields: [userId], references: [id])
-  userId      BigInt
-  tokenHash   String   @unique
-  expiresAt   DateTime
-  revokedAt   DateTime?
-  createdAt   DateTime @default(now())
+  id        BigInt    @id @default(autoincrement())
+  userId    BigInt
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
 
   @@index([expiresAt])
 }
 
 /// Bridge transaction record for cross-chain transfers
 model BridgeTransaction {
-  id            BigInt   @id @default(autoincrement())
-  userAddress   String
-  fromChainId   Int
-  toChainId     Int
-  tokenAddress  String
-  amount        String
-  status        String   // pending, success, failed
-  txHashSource  String?  // hash giao dịch trên chain nguồn
-  txHashDest    String?  // hash giao dịch trên chain đích
-  errorMessage  String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  logs          BridgeTransactionLog[]
+  id           BigInt                 @id @default(autoincrement())
+  userAddress  String
+  fromChainId  Int
+  toChainId    Int
+  tokenAddress String
+  amount       String
+  status       String
+  txHashSource String?
+  txHashDest   String?
+  errorMessage String?
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  logs         BridgeTransactionLog[]
 
   @@index([userAddress, createdAt(sort: Desc)])
   @@index([fromChainId, toChainId, createdAt(sort: Desc)])
@@ -134,12 +133,12 @@ model BridgeTransaction {
 
 /// Audit log for each step in a bridge transaction
 model BridgeTransactionLog {
-  id                  BigInt   @id @default(autoincrement())
-  bridgeTransaction   BridgeTransaction @relation(fields: [bridgeTransactionId], references: [id])
+  id                  BigInt            @id @default(autoincrement())
   bridgeTransactionId BigInt
-  step                String   // Tên bước xử lý (init, lock, wait, mint, done, error...)
-  detail              String?  // Thông tin chi tiết (JSON/text)
-  createdAt           DateTime @default(now())
+  step                String
+  detail              String?
+  createdAt           DateTime          @default(now())
+  bridgeTransaction   BridgeTransaction @relation(fields: [bridgeTransactionId], references: [id])
 
   @@index([bridgeTransactionId, createdAt])
 }

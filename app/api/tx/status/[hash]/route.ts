@@ -21,7 +21,8 @@ export async function GET(_req: NextRequest, context: RouteContext) {
   const receipt = await arcProvider.getTransactionReceipt(hash).catch(() => null);
 
   const nextStatus = !receipt ? existing?.status ?? 'pending' : receipt.status === 1 ? 'success' : 'failed';
-  const errorMessage = receipt && receipt.status !== 1 ? 'Swap transaction reverted on chain.' : existing?.errorMessage ?? null;
+  const errorMessage = receipt && receipt.status !== 1 ? 'Transaction reverted on chain.' : existing?.errorMessage ?? null;
+  const now = receipt ? new Date() : null;
 
   if (existing && (existing.status !== nextStatus || existing.errorMessage !== errorMessage)) {
     await prisma.transaction.update({
@@ -29,9 +30,12 @@ export async function GET(_req: NextRequest, context: RouteContext) {
       data: {
         status: nextStatus,
         errorMessage,
+        ...(now && !existing.confirmedAt ? { confirmedAt: now } : {}),
       },
     });
   }
+
+  const confirmedAt = existing?.confirmedAt ?? now;
 
   return NextResponse.json({
     hash,
@@ -39,7 +43,7 @@ export async function GET(_req: NextRequest, context: RouteContext) {
     explorerUrl: existing?.explorerUrl ?? null,
     chainId: existing?.chainId ?? null,
     blockNumber: receipt ? receipt.blockNumber.toString() : null,
-    confirmedAt: receipt ? new Date().toISOString() : null,
+    confirmedAt: confirmedAt ? confirmedAt.toISOString() : null,
     errorMessage,
   });
 }

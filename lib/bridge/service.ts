@@ -233,7 +233,7 @@ export class BridgeService {
     });
 
     return {
-      transactions: transactions.map((tx) => ({
+      transactions: transactions.map((tx: any) => ({
         id: Number(tx.id),
         userAddress: tx.userAddress as Address,
         fromChainId: tx.fromChainId,
@@ -262,7 +262,7 @@ export class BridgeService {
 
     return {
       ...tx,
-      logs: logs.map((log) => ({
+      logs: logs.map((log: any) => ({
         id: Number(log.id),
         step: log.step,
         detail: log.detail ? JSON.parse(log.detail) : null,

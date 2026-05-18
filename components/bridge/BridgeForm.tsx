@@ -513,7 +513,6 @@ export const BridgeForm: React.FC<BridgeFormProps> = ({ onTransferSuccess }) => 
             value={formData.amount}
             onChange={handleInputChange}
             step="0.01"
-            className="w-full"
           />
         </div>
 

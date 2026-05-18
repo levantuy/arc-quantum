@@ -111,7 +111,7 @@ async function logSecurityEvent(request: NextRequest, payload: {
   }
 }
 
-export async function middleware(request: NextRequest, event: NextFetchEvent) {
+export async function proxy(request: NextRequest, event: NextFetchEvent) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
   const validSession = token ? await verifyAdminSessionJwt(token) : null;

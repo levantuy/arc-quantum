@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useWalletStore } from '@/stores/wallet';
 import { shortenAddress } from '@/utils';
-import styles from './SwapWorkspace.module.css';
 
 type SwapToken = {
   symbol: string;

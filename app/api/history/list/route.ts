@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       data: {
-        transactions: transactions.map((transaction) => ({
+        transactions: transactions.map((transaction: any) => ({
           id: Number(transaction.id),
           hash: transaction.hash,
           txType: transaction.txType,
@@ -74,6 +74,7 @@ export async function GET(req: NextRequest) {
           status: transaction.status,
           explorerUrl: transaction.explorerUrl,
           errorMessage: transaction.errorMessage,
+          confirmedAt: transaction.confirmedAt ? transaction.confirmedAt.toISOString() : null,
           createdAt: transaction.createdAt.toISOString(),
           updatedAt: transaction.updatedAt.toISOString(),
         })),

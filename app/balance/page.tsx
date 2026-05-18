@@ -57,8 +57,8 @@ export default function BalancePage() {
           <span className="block text-2xl font-semibold text-emerald-700 mt-2">${totalUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
         )}
         <div className="mt-2 space-y-1 text-xs">
-          {lastUpdatedAt && <p className="text-slate-500">Cập nhật lúc {lastUpdatedAt.toLocaleTimeString('vi-VN')}</p>}
-          {staleData && <p className="text-amber-700">Dữ liệu có thể lỗi thời</p>}
+          {lastUpdatedAt && <p className="text-slate-500">Updated at {lastUpdatedAt.toLocaleTimeString()}</p>}
+          {staleData && <p className="text-amber-700">Data may be stale</p>}
         </div>
       </div>
 

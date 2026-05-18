@@ -12,7 +12,6 @@ import {
   ARC_TESTNET_EXPLORER_URL,
 } from '@/constants';
 import { shortenAddress } from '@/utils';
-import styles from './SwapExperience.module.css';
 
 type SwapTokenSymbol = (typeof ARC_SWAP_TOKENS)[number];
 
@@ -168,7 +167,7 @@ export function SwapExperience() {
   const canSubmit = canRequestQuote && !quote.error && !busy;
   const totalFeeText = quote.fees.length
     ? quote.fees.map((fee) => `${fee.amount} ${fee.token} (${fee.type})`).join(' • ')
-    : 'Arc se tra ve phi khi co estimate.';
+    : 'Arc will return fees when the quote is ready.';
 
   useEffect(() => {
     const originalFetch = window.fetch.bind(window);
@@ -296,7 +295,7 @@ export function SwapExperience() {
     setHistoryLoading(true);
     setHistoryError(null);
     const offset = (page - 1) * PAGE_SIZE;
-    
+
     try {
       const response = await fetch(
         `/api/history/list?address=${encodeURIComponent(address)}&type=swap&limit=${PAGE_SIZE}&offset=${offset}`,
@@ -345,11 +344,11 @@ export function SwapExperience() {
     setTxProgress((current) =>
       current
         ? {
-            ...current,
-            phase,
-            explorerUrl: data.explorerUrl ?? explorerUrl,
-            errorMessage: data.errorMessage ?? null,
-          }
+          ...current,
+          phase,
+          explorerUrl: data.explorerUrl ?? explorerUrl,
+          errorMessage: data.errorMessage ?? null,
+        }
         : current,
     );
 
@@ -425,10 +424,10 @@ export function SwapExperience() {
       setTxProgress((current) =>
         current
           ? {
-              ...current,
-              phase: 'failed',
-              errorMessage: message,
-            }
+            ...current,
+            phase: 'failed',
+            errorMessage: message,
+          }
           : current,
       );
     } finally {
@@ -451,362 +450,430 @@ export function SwapExperience() {
   };
 
   return (
-    <main className={styles.pageShell}>
-      <section className={styles.heroPanel}>
-        <div className={styles.heroCopy}>
-          <span className={styles.badge}>Arc Swap Integration</span>
-          <p>Real swaps with browser wallets, live quotes, and on-chain polling.</p>
-          {!PUBLIC_ARC_KIT_KEY ? <p className={styles.warningText}>Configure NEXT_PUBLIC_ARC_KIT_KEY so Arc App Kit can create quotes and swaps.</p> : null}
-        </div>
-      </section>
-
-      <section className={styles.workspaceGrid}>
-        <article className={styles.swapCard}>
-          <div className={styles.cardHeader}>
-            <div>
-              <p className={styles.eyebrow}>Swap form</p>
-              <h2>Execute transaction</h2>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-6">
+          <h2 className="text-3xl font-bold text-gray-900">Swap</h2>
+          <p className="text-gray-600 mt-2">Swap stablecoins on Arc Testnet with live quotes</p>
+          {!PUBLIC_ARC_KIT_KEY ? (
+            <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
+              Configure NEXT_PUBLIC_ARC_KIT_KEY so Arc App Kit can create quotes and swaps.
             </div>
-            <div className={styles.inlineStat}>{amount || '0'} {fromToken}</div>
-          </div>
-
-          <div className={styles.tokenPanel}>
-            <div className={styles.fieldRow}>
-              <label htmlFor="from-token">From token</label>
-              <span>{TOKEN_META[fromToken].name}</span>
-            </div>
-            <div className={styles.inputGroup}>
-              <select
-                id="from-token"
-                className={styles.selectInput}
-                value={fromToken}
-                onChange={(event) => setFromToken(event.target.value as SwapTokenSymbol)}
-              >
-                {ARC_SWAP_TOKENS.map((token) => (
-                  <option key={token} value={token}>
-                    {token} - {TOKEN_META[token].name}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="number"
-                inputMode="decimal"
-                min="0"
-                step="0.0001"
-                className={styles.amountInput}
-                value={amount}
-                onChange={(event) => setAmount(event.target.value)}
-                placeholder="1.00"
-              />
-            </div>
-          </div>
-
-          <div className={styles.flipRow}>
-            <div className={styles.routeHint}>Route: Arc Stablecoin Service</div>
-            <button
-              type="button"
-              className={styles.flipButton} style={{marginTop: '4px'}}
-              onClick={() => {
-                setFromToken(toToken);
-                setToToken(fromToken);
-              }}
-              title="Flip pair"
-            >
-              ⇅ 
-            </button>
-          </div>
-
-          <div className={styles.tokenPanel}>
-            <div className={styles.fieldRow}>
-              <label htmlFor="to-token">To token</label>
-              <span>{TOKEN_META[toToken].name}</span>
-            </div>
-            <div className={styles.inputGroup}>
-              <select
-                id="to-token"
-                className={styles.selectInput}
-                value={toToken}
-                onChange={(event) => setToToken(event.target.value as SwapTokenSymbol)}
-              >
-                {ARC_SWAP_TOKENS.filter((token) => token !== fromToken).map((token) => (
-                  <option key={token} value={token}>
-                    {token} - {TOKEN_META[token].name}
-                  </option>
-                ))}
-              </select>
-              <div className={styles.outputBox}>
-                {quoteLoading ? 'Fetching quote...' : `${formatAmount(quote.estimatedOutput)} ${toToken}`}
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.settingsPanel}>
-            <div className={styles.settingsHeader}>
-              <div>
-                <p className={styles.eyebrow}>Protection</p>
-                <h3>Slippage tolerance</h3>
-              </div>
-              <div className={styles.segmentedRow}>
-                {['0.5', '1.0', '2.0'].map((preset) => (
-                  <button
-                    key={preset}
-                    type="button"
-                    className={preset === slippage ? styles.segmentActive : styles.segmentButton}
-                    onClick={() => setSlippage(preset)}
-                  >
-                    {preset}%
-                  </button>
-                ))}
-              </div>
-            </div>
-            <input
-              type="number"
-              min="0.1"
-              max="5"
-              step="0.1"
-              className={styles.amountInput}
-              value={slippage}
-              onChange={(event) => setSlippage(event.target.value)}
-            />
-          </div>
-
-          {fromToken === toToken ? <p className={styles.errorText}>From and to tokens must be different.</p> : null}
-          {quote.error ? <p className={styles.errorText}>{quote.error}</p> : null}
-          {swapError ? <p className={styles.errorText}>{swapError}</p> : null}
-
-          {!connected ? (
-            <button
-              type="button"
-              className={styles.primaryButton}
-              disabled={walletLoading}
-              onClick={() => void connect()}
-            >
-              {walletLoading ? 'Connecting...' : 'Connect wallet'}
-            </button>
-          ) : (
-            <button
-              type="button"
-              className={styles.primaryButton}
-              disabled={!canSubmit}
-              onClick={() => setPreviewOpen(true)}
-            >
-              {busy ? 'Processing...' : 'Preview and sign transaction'}
-            </button>
-          )}
-        </article>
-
-        <div className={styles.sideColumn}>
-          <article className={styles.infoCard}>
-            <div className={styles.cardHeader}>
-              <div>
-                <p className={styles.eyebrow}>Live estimate</p>
-                <h2>Quote details</h2>
-              </div>
-              <div className={styles.pulseBadge}>{quoteLoading ? 'Syncing' : 'Live'}</div>
-            </div>
-
-            <dl className={styles.detailList}>
-              <div>
-                <dt>Expected output</dt>
-                <dd>{formatAmount(quote.estimatedOutput)} {toToken}</dd>
-              </div>
-              <div>
-                <dt>Minimum received</dt>
-                <dd>{formatAmount(quote.minimumReceived)} {toToken}</dd>
-              </div>
-              <div>
-                <dt>Slippage</dt>
-                <dd>{slippage}% ({slippageBps} bps)</dd>
-              </div>
-              <div>
-                <dt>Fee breakdown</dt>
-                <dd>{totalFeeText}</dd>
-              </div>
-            </dl>
-          </article>
-
-          <article className={styles.infoCard}>
-            <div className={styles.cardHeader}>
-              <div>
-                <p className={styles.eyebrow}>Swap history</p>
-                <h2>Recent transactions</h2>
-              </div>
-            </div>
-
-            {walletAddress ? (
-              <>
-                {historyLoading ? (
-                  <div className={styles.historyList}>
-                    <p className={styles.noticeText}>Loading transactions...</p>
-                  </div>
-                ) : historyError ? (
-                  <p className={styles.noticeText}>{historyError}</p>
-                ) : history.length > 0 ? (
-                  <>
-                    <div className={styles.historyList}>
-                      <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.5rem', paddingLeft: '0.5rem' }}>
-                        {totalTransactions} transaction(s)
-                      </div>
-                      {history.map((item) => (
-                        <article key={item.hash} className={styles.historyItem}>
-                          <div className={styles.historyTopRow}>
-                            <strong>
-                              {item.tokenIn} {'\u2192'} {item.tokenOut}
-                            </strong>
-                            <span className={item.status === 'success' ? styles.statusSuccess : item.status === 'failed' ? styles.statusFailed : styles.statusPending}>
-                              {statusLabel(item.status)}
-                            </span>
-                          </div>
-                          <p>
-                            {item.amountIn ?? item.amount} {item.tokenIn} → {item.amountOut ?? '--'} {item.tokenOut}
-                          </p>
-                          <div className={styles.historyMeta}>
-                            <span>{new Date(item.createdAt).toLocaleString('en-US')}</span>
-                            {item.explorerUrl ? (
-                              <a href={item.explorerUrl} target="_blank" rel="noreferrer">
-                                {shortenAddress(item.hash, 6)}
-                              </a>
-                            ) : (
-                              <span>{shortenAddress(item.hash, 6)}</span>
-                            )}
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '0.75rem', borderTop: '1px solid #e5e7eb', marginTop: '0.75rem' }}>
-                      <button
-                        onClick={handleHistoryPreviousPage}
-                        disabled={!canGoPreviousPage || historyLoading}
-                        style={{
-                          padding: '0.375rem 0.75rem',
-                          fontSize: '0.875rem',
-                          borderRadius: '0.375rem',
-                          border: '1px solid #d1d5db',
-                          color: '#374151',
-                          backgroundColor: '#fff',
-                          cursor: !canGoPreviousPage || historyLoading ? 'not-allowed' : 'pointer',
-                          opacity: !canGoPreviousPage || historyLoading ? 0.5 : 1,
-                        }}
-                      >
-                        Previous
-                      </button>
-                      <span style={{ fontSize: '0.75rem', color: '#4b5563' }}>
-                        Page {Math.min(currentPage, totalPages)} / {totalPages}
-                      </span>
-                      <button
-                        onClick={handleHistoryNextPage}
-                        disabled={!canGoNextPage || historyLoading}
-                        style={{
-                          padding: '0.375rem 0.75rem',
-                          fontSize: '0.875rem',
-                          borderRadius: '0.375rem',
-                          border: '1px solid #d1d5db',
-                          color: '#374151',
-                          backgroundColor: '#fff',
-                          cursor: !canGoNextPage || historyLoading ? 'not-allowed' : 'pointer',
-                          opacity: !canGoNextPage || historyLoading ? 0.5 : 1,
-                        }}
-                      >
-                        Next
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <p className={styles.noticeText}>No swap records in the database for this wallet yet.</p>
-                )}
-              </>
-            ) : (
-              <p className={styles.noticeText}>Connect your wallet to load swap history from the backend.</p>
-            )}
-          </article>
-
-          {txProgress ? (
-            <article className={styles.statusCard}>
-              <div className={styles.cardHeader}>
-                <div>
-                  <p className={styles.eyebrow}>Transaction status</p>
-                  <h2>{statusLabel(txProgress.phase)}</h2>
-                </div>
-                <div className={styles.statusBadge}>{txProgress.phase}</div>
-              </div>
-              <p className={styles.statusMeta}>TX hash: {shortenAddress(txProgress.hash, 6)} · At {txProgress.submittedAt}</p>
-              <div className={styles.progressBar}>
-                <span
-                  style={{
-                    width:
-                      txProgress.phase === 'pending'
-                        ? '32%'
-                        : txProgress.phase === 'confirming'
-                          ? '72%'
-                          : '100%',
-                  }}
-                />
-              </div>
-              {txProgress.explorerUrl ? (
-                <a className={styles.externalLink} href={txProgress.explorerUrl} target="_blank" rel="noreferrer">
-                  View on Arcscan
-                </a>
-              ) : null}
-              {txProgress.errorMessage ? <p className={styles.errorText}>{txProgress.errorMessage}</p> : null}
-            </article>
           ) : null}
         </div>
-      </section>
 
-      {previewOpen ? (
-        <div className={styles.modalOverlay} role="presentation">
-          <div className={styles.modalCard} role="dialog" aria-modal="true" aria-labelledby="swap-preview-title">
-            <div className={styles.cardHeader}>
-              <div>
-                <p className={styles.eyebrow}>Preview</p>
-                <h2 id="swap-preview-title">Confirm quote before signing</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6">
+          {/* Swap Form Card */}
+          <div className="bg-white border border-gray-200 rounded-lg shadow p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-xl font-bold text-gray-900">Swap tokens</h3>
+              <span className="px-2.5 py-1 bg-teal-50 text-teal-700 rounded-lg text-sm font-semibold">
+                {amount || '0'} {fromToken}
+              </span>
+            </div>
+
+            {/* From token */}
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor="from-token" className="text-sm font-medium text-gray-700">
+                  From token
+                </label>
+                <span className="text-sm text-gray-500">{TOKEN_META[fromToken].name}</span>
               </div>
-              <button type="button" className={styles.closeButton} onClick={() => setPreviewOpen(false)}>
-                Close
+              <div className="flex gap-2">
+                <select
+                  id="from-token"
+                  value={fromToken}
+                  onChange={(event) => setFromToken(event.target.value as SwapTokenSymbol)}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900"
+                >
+                  {ARC_SWAP_TOKENS.map((token) => (
+                    <option key={token} value={token}>
+                      {token} - {TOKEN_META[token].name}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.0001"
+                  value={amount}
+                  onChange={(event) => setAmount(event.target.value)}
+                  placeholder="1.00"
+                  className="w-36 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900"
+                />
+              </div>
+            </div>
+
+            {/* Flip row */}
+            <div className="flex items-center justify-between my-3">
+              <span className="text-xs text-gray-500 bg-teal-50 text-teal-700 px-2.5 py-1 rounded-full">
+                Route: Arc Stablecoin Service
+              </span>
+              <button
+                type="button"
+                title="Flip pair"
+                onClick={() => {
+                  setFromToken(toToken);
+                  setToToken(fromToken);
+                }}
+                className="p-1.5 rounded-full border border-gray-300 bg-gray-50 hover:bg-gray-100 transition cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                  <path stroke="#0f8a7b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4" />
+                </svg>
               </button>
             </div>
 
-            <div className={styles.previewHero}>
-              <div>
-                <span>You send</span>
-                <strong>{formatAmount(amount)} {fromToken}</strong>
+            {/* To token */}
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor="to-token" className="text-sm font-medium text-gray-700">
+                  To token
+                </label>
+                <span className="text-sm text-gray-500">{TOKEN_META[toToken].name}</span>
               </div>
-              <div>
-                <span>You receive</span>
-                <strong>{formatAmount(quote.estimatedOutput)} {toToken}</strong>
+              <div className="flex gap-2">
+                <select
+                  id="to-token"
+                  value={toToken}
+                  onChange={(event) => setToToken(event.target.value as SwapTokenSymbol)}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900"
+                >
+                  {ARC_SWAP_TOKENS.filter((token) => token !== fromToken).map((token) => (
+                    <option key={token} value={token}>
+                      {token} - {TOKEN_META[token].name}
+                    </option>
+                  ))}
+                </select>
+                <div className="w-36 flex items-center px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-900 font-semibold">
+                  {quoteLoading ? 'Fetching...' : `${formatAmount(quote.estimatedOutput)} ${toToken}`}
+                </div>
               </div>
             </div>
 
-            <dl className={styles.previewGrid}>
+            {/* Slippage */}
+            <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor="slippage-input" className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  Slippage tolerance
+                </label>
+                <div className="flex gap-1 p-0.5 bg-gray-200 rounded-full">
+                  {['0.5', '1.0', '2.0'].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setSlippage(preset)}
+                      className={`px-2.5 py-1 rounded-full text-xs font-medium transition cursor-pointer border-0 ${
+                        preset === slippage
+                          ? 'bg-white text-gray-900 shadow'
+                          : 'bg-transparent text-gray-600 hover:text-gray-800'
+                      }`}
+                    >
+                      {preset}%
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <input
+                id="slippage-input"
+                type="number"
+                min="0.1"
+                max="5"
+                step="0.1"
+                value={slippage}
+                onChange={(event) => setSlippage(event.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-900"
+              />
+            </div>
+
+            {fromToken === toToken ? (
+              <p className="mb-3 p-2.5 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                From and to tokens must be different.
+              </p>
+            ) : null}
+            {quote.error ? (
+              <p className="mb-3 p-2.5 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                {quote.error}
+              </p>
+            ) : null}
+            {swapError ? (
+              <p className="mb-3 p-2.5 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                {swapError}
+              </p>
+            ) : null}
+
+            {!connected ? (
+              <button
+                type="button"
+                disabled={walletLoading}
+                onClick={() => void connect()}
+                className="w-full mt-2 py-2.5 px-4 bg-gradient-to-br from-teal-600 to-teal-800 text-white font-semibold rounded-lg hover:opacity-90 transition disabled:opacity-50 cursor-pointer border-0"
+              >
+                {walletLoading ? 'Connecting...' : 'Connect wallet'}
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled={!canSubmit}
+                onClick={() => setPreviewOpen(true)}
+                className="w-full mt-2 py-2.5 px-4 bg-gradient-to-br from-teal-600 to-teal-800 text-white font-semibold rounded-lg hover:opacity-90 transition disabled:opacity-50 cursor-pointer border-0"
+              >
+                {busy ? 'Processing...' : 'Preview & sign'}
+              </button>
+            )}
+          </div>
+
+          {/* Right column */}
+          <div className="flex flex-col gap-4">
+            {/* Quote details */}
+            <div className="bg-white border border-gray-200 rounded-lg shadow p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-gray-900">Quote details</h3>
+                <span
+                  className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                    quoteLoading ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
+                  }`}
+                >
+                  {quoteLoading ? 'Syncing' : 'Live'}
+                </span>
+              </div>
+              <dl className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <div>
+                  <dt className="text-xs text-gray-500 uppercase tracking-wide">Expected output</dt>
+                  <dd className="mt-1 text-sm font-semibold text-gray-900">
+                    {formatAmount(quote.estimatedOutput)} {toToken}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-gray-500 uppercase tracking-wide">Minimum received</dt>
+                  <dd className="mt-1 text-sm font-semibold text-gray-900">
+                    {formatAmount(quote.minimumReceived)} {toToken}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-gray-500 uppercase tracking-wide">Slippage</dt>
+                  <dd className="mt-1 text-sm font-semibold text-gray-900">
+                    {slippage}% ({slippageBps} bps)
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-gray-500 uppercase tracking-wide">Fees</dt>
+                  <dd className="mt-1 text-sm font-semibold text-gray-900">{totalFeeText}</dd>
+                </div>
+              </dl>
+            </div>
+
+            {/* TX Status */}
+            {txProgress ? (
+              <div className="rounded-lg p-4 bg-[#143434] text-white">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-base font-bold">{statusLabel(txProgress.phase)}</h3>
+                  <span className="px-2.5 py-0.5 rounded-full text-xs bg-white/10 text-white/90">
+                    {txProgress.phase}
+                  </span>
+                </div>
+                <p className="text-xs text-white/75 mb-3">
+                  TX: {shortenAddress(txProgress.hash, 6)} · at {txProgress.submittedAt}
+                </p>
+                <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-orange-400 to-yellow-200 transition-all duration-300"
+                    style={{
+                      width:
+                        txProgress.phase === 'pending'
+                          ? '32%'
+                          : txProgress.phase === 'confirming'
+                            ? '72%'
+                            : '100%',
+                    }}
+                  />
+                </div>
+                {txProgress.explorerUrl ? (
+                  <a
+                    className="inline-block mt-2 text-xs text-white/75 underline"
+                    href={txProgress.explorerUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    View on Arcscan
+                  </a>
+                ) : null}
+                {txProgress.errorMessage ? (
+                  <p className="mt-2 text-xs text-red-300">{txProgress.errorMessage}</p>
+                ) : null}
+              </div>
+            ) : null}
+
+            {/* Swap history */}
+            <div className="bg-white border border-gray-200 rounded-lg shadow p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Swap history</h3>
+
+              {walletAddress ? (
+                <>
+                  {historyLoading ? (
+                    <p className="text-sm text-gray-500 py-2">Loading...</p>
+                  ) : historyError ? (
+                    <p className="text-sm text-red-600 py-2">{historyError}</p>
+                  ) : history.length > 0 ? (
+                    <>
+                      <p className="text-xs text-gray-400 mb-2">{totalTransactions} transaction(s)</p>
+                      <div className="space-y-2 max-h-64 overflow-y-auto">
+                        {history.map((item) => (
+                          <div key={item.hash} className="p-3 rounded-lg border border-gray-100 bg-gray-50">
+                            <div className="flex items-center justify-between">
+                              <strong className="text-sm text-gray-900">
+                                {item.tokenIn} {'\u2192'} {item.tokenOut}
+                              </strong>
+                              <span
+                                className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                  item.status === 'success'
+                                    ? 'bg-green-100 text-green-800'
+                                    : item.status === 'failed'
+                                      ? 'bg-red-100 text-red-800'
+                                      : 'bg-yellow-100 text-yellow-800'
+                                }`}
+                              >
+                                {statusLabel(item.status)}
+                              </span>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {item.amountIn ?? item.amount} {item.tokenIn} → {item.amountOut ?? '--'} {item.tokenOut}
+                            </p>
+                            <div className="flex items-center justify-between mt-1.5 text-xs text-gray-400">
+                              <span>{new Date(item.createdAt).toLocaleString('en-US')}</span>
+                              {item.explorerUrl ? (
+                                <a
+                                  href={item.explorerUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-teal-600 hover:underline"
+                                >
+                                  {shortenAddress(item.hash, 6)}
+                                </a>
+                              ) : (
+                                <span>{shortenAddress(item.hash, 6)}</span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-3">
+                        <button
+                          onClick={handleHistoryPreviousPage}
+                          disabled={!canGoPreviousPage || historyLoading}
+                          className="px-3 py-1 text-xs rounded-lg border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                        >
+                          ← Prev
+                        </button>
+                        <span className="text-xs text-gray-400">
+                          Page {Math.min(currentPage, totalPages)} / {totalPages}
+                        </span>
+                        <button
+                          onClick={handleHistoryNextPage}
+                          disabled={!canGoNextPage || historyLoading}
+                          className="px-3 py-1 text-xs rounded-lg border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                        >
+                          Next →
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <p className="text-sm text-gray-500">No swap records yet.</p>
+                  )}
+                </>
+              ) : (
+                <p className="text-sm text-gray-500">Connect your wallet to load swap history.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Preview Modal */}
+      {previewOpen ? (
+        <div
+          className="fixed inset-0 p-6 bg-[rgba(20,52,52,0.42)] flex items-start justify-center overflow-y-auto z-50"
+          role="presentation"
+        >
+          <div
+            className="w-full max-w-lg mt-3 max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white rounded-2xl shadow-xl p-6"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="swap-preview-title"
+          >
+            <div className="flex items-center justify-between mb-5">
+              <h2 id="swap-preview-title" className="text-xl font-bold text-gray-900">
+                Confirm swap
+              </h2>
+              <button
+                type="button"
+                onClick={() => setPreviewOpen(false)}
+                className="p-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition cursor-pointer border-0"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 mb-5">
+              <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
+                <span className="text-xs text-gray-500">You send</span>
+                <strong className="block mt-1 text-lg text-gray-900">
+                  {formatAmount(amount)} {fromToken}
+                </strong>
+              </div>
+              <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
+                <span className="text-xs text-gray-500">You receive</span>
+                <strong className="block mt-1 text-lg text-gray-900">
+                  {formatAmount(quote.estimatedOutput)} {toToken}
+                </strong>
+              </div>
+            </div>
+
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-4 mb-5">
               <div>
-                <dt>Wallet</dt>
-                <dd>{walletAddress ? shortenAddress(walletAddress) : '--'}</dd>
+                <dt className="text-xs text-gray-500 uppercase tracking-wide">Wallet</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900">
+                  {walletAddress ? shortenAddress(walletAddress) : '--'}
+                </dd>
               </div>
               <div>
-                <dt>Network</dt>
-                <dd>Arc Testnet</dd>
+                <dt className="text-xs text-gray-500 uppercase tracking-wide">Network</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900">Arc Testnet</dd>
               </div>
               <div>
-                <dt>Minimum received</dt>
-                <dd>{formatAmount(quote.minimumReceived)} {toToken}</dd>
+                <dt className="text-xs text-gray-500 uppercase tracking-wide">Minimum received</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900">
+                  {formatAmount(quote.minimumReceived)} {toToken}
+                </dd>
               </div>
               <div>
-                <dt>Fees</dt>
-                <dd>{totalFeeText}</dd>
+                <dt className="text-xs text-gray-500 uppercase tracking-wide">Fees</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900">{totalFeeText}</dd>
               </div>
             </dl>
 
-            <div className={styles.modalActions}>
-              <button type="button" className={styles.secondaryButton} onClick={() => setPreviewOpen(false)}>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setPreviewOpen(false)}
+                className="flex-1 py-2.5 px-4 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition cursor-pointer border-0"
+              >
                 Back
               </button>
-              <button type="button" className={styles.primaryButton} onClick={() => void handleConfirmSwap()} disabled={busy}>
-                {busy ? 'Submitting transaction...' : 'Confirm and sign'}
+              <button
+                type="button"
+                onClick={() => void handleConfirmSwap()}
+                disabled={busy}
+                className="flex-1 py-2.5 px-4 bg-gradient-to-br from-teal-600 to-teal-800 text-white font-semibold rounded-lg hover:opacity-90 transition disabled:opacity-50 cursor-pointer border-0"
+              >
+                {busy ? 'Submitting...' : 'Confirm & sign'}
               </button>
             </div>
           </div>
         </div>
       ) : null}
-    </main>
+    </div>
   );
 }

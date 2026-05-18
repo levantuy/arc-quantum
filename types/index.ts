@@ -29,6 +29,7 @@ export interface Transaction {
   status: 'pending' | 'confirming' | 'success' | 'failed';
   explorerUrl?: string | null;
   errorMessage?: string | null;
+  confirmedAt?: string | null;
   createdAt: string;
   updatedAt?: string;
 }

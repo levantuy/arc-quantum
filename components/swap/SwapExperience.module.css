@@ -1,6 +1,6 @@
 .pageShell {
   min-height: 100vh;
-  padding: 10px 24px 56px;
+  padding: 6px 20px 20px;
   background: var(--tw-bg-opacity, 1) theme('colors.background');
 }
 
@@ -60,6 +60,7 @@
     color: #fffaf7;
   }
   .secondaryButton,
+  .ghostButton,
   .flipButton,
   .closeButton {
     background: rgba(36, 72, 72, 0.18);
@@ -119,13 +120,33 @@
 .fieldRow,
 .flipRow,
 .settingsHeader,
-.modalActions,
 .historyTopRow,
 .historyMeta {
   display: flex;
   justify-content: space-between;
   gap: 12px;
   align-items: center;
+}
+
+.modalActions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.modalActions .primaryButton,
+.modalActions .secondaryButton {
+  margin-top: 0;
+  flex: 1;
+  white-space: nowrap;
+  width: auto;
+}
+
+.modalActions .secondaryButton {
+  min-width: 130px;
 }
 
 .heroActions {
@@ -140,13 +161,13 @@
 .statusBadge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   width: fit-content;
-  padding: 10px 14px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: rgba(20, 52, 52, 0.06);
   color: #244848;
-  font-size: 0.86rem;
+  font-size: 0.82rem;
 }
 
 .badge {
@@ -165,7 +186,7 @@
 .metricGrid,
 .sideColumn {
   display: grid;
-  gap: 16px;
+  gap: 10px;
 }
 
 .metricCard,
@@ -182,9 +203,12 @@
 .metricCard,
 .swapCard,
 .infoCard,
-.statusCard,
+.statusCard {
+  padding: 14px;
+}
+
 .modalCard {
-  padding: 24px;
+  padding: 18px;
 }
 
 .metricCard strong,
@@ -194,10 +218,22 @@
   color: #143434;
 }
 
+.cardHeader h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.settingsHeader h3 {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
 .metricCard strong {
   display: block;
-  margin-top: 10px;
-  font-size: 1.4rem;
+  margin-top: 6px;
+  font-size: 1.2rem;
 }
 
 .metricCard p,
@@ -213,19 +249,20 @@
 }
 
 .workspaceGrid {
-  max-width: 1200px;
+  max-width: 1080px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.95fr);
-  gap: 22px;
+  grid-template-columns: minmax(0, 1.2fr) minmax(290px, 0.9fr);
+  gap: 12px;
 }
 
 .inlineStat {
-  padding: 10px 14px;
-  border-radius: 18px;
+  padding: 4px 10px;
+  border-radius: 12px;
   background: rgba(15, 138, 123, 0.12);
   color: #0e6b61;
   font-weight: 700;
+  font-size: 0.88rem;
 }
 
 .eyebrow,
@@ -244,9 +281,9 @@
 .detailList div,
 .previewGrid div,
 .previewHero div {
-  margin-top: 18px;
-  padding: 18px;
-  border-radius: 22px;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 16px;
   background: linear-gradient(180deg, rgba(246, 242, 235, 0.82), rgba(255, 255, 255, 0.92));
   border: 1px solid rgba(20, 52, 52, 0.08);
 }
@@ -256,24 +293,25 @@
 .previewGrid,
 .previewHero {
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 
 .inputGroup {
-  grid-template-columns: minmax(180px, 1fr) minmax(0, 1.1fr);
-  margin-top: 12px;
+  grid-template-columns: minmax(160px, 1fr) minmax(0, 1.1fr);
+  margin-top: 8px;
 }
 
 .selectInput,
 .amountInput,
 .outputBox {
   width: 100%;
-  min-height: 56px;
-  padding: 0 16px;
-  border-radius: 18px;
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 12px;
   border: 1px solid rgba(20, 52, 52, 0.12);
   background: rgba(255, 255, 255, 0.88);
   color: #143434;
+  font-size: 0.9rem;
 }
 
 .outputBox {
@@ -283,9 +321,10 @@
 }
 
 .routeHint {
-  padding: 10px 14px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: rgba(15, 138, 123, 0.08);
+  font-size: 0.78rem;
 }
 
 .segmentedRow {
@@ -304,23 +343,28 @@
   border: 0;
   cursor: pointer;
   transition: transform 140ms ease, opacity 140ms ease;
+  margin-top: 14px;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #0f8a7b, #195f58);
+  color: #fffaf7;
+  width: 100%;
+}
+
+.secondaryButton {
+  background: rgba(20, 52, 52, 0.06);
+  color: #244848;
+  width: 100%;
 }
 
 .primaryButton,
 .secondaryButton,
 .flipButton,
 .closeButton {
-  min-height: 50px;
-  padding: 0 18px;
-  border-radius: 18px;
-}
-
-.primaryButton {
-  margin-top: 18px;
-  width: 100%;
-  background: linear-gradient(135deg, #0f8a7b, #195f58);
-  color: #fffaf7;
-  box-shadow: 0 16px 28px rgba(15, 138, 123, 0.24);
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 12px;
 }
 
 .secondaryButton,
@@ -332,11 +376,12 @@
 
 .segmentButton,
 .segmentActive {
-  min-width: 72px;
-  padding: 10px 14px;
+  min-width: 54px;
+  padding: 6px 10px;
   border-radius: 999px;
   background: transparent;
   color: rgba(20, 52, 52, 0.72);
+  font-size: 0.82rem;
 }
 
 .segmentActive {
@@ -352,16 +397,20 @@
 
 .detailList dd,
 .previewGrid dd {
-  margin: 10px 0 0;
-  font-size: 1rem;
+  margin: 6px 0 0;
+  font-size: 0.9rem;
   font-weight: 700;
   color: #143434;
 }
 
 .historyList {
   display: grid;
-  gap: 12px;
-  margin-top: 18px;
+  gap: 6px;
+  margin-top: 8px;
+  max-height: 272px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(20, 52, 52, 0.14) transparent;
 }
 
 .historyItem {
@@ -369,8 +418,8 @@
 }
 
 .historyMeta {
-  margin-top: 10px;
-  font-size: 0.86rem;
+  margin-top: 6px;
+  font-size: 0.8rem;
 }
 
 .statusSuccess,
@@ -409,8 +458,8 @@
 }
 
 .progressBar {
-  margin-top: 16px;
-  height: 10px;
+  margin-top: 10px;
+  height: 8px;
   border-radius: 999px;
   background: rgba(239, 248, 246, 0.14);
   overflow: hidden;
@@ -426,16 +475,19 @@
 
 .externalLink {
   display: inline-block;
-  margin-top: 14px;
+  margin-top: 8px;
+  font-size: 0.82rem;
   text-decoration: underline;
 }
 
 .noticeText,
 .errorText,
 .warningText {
-  margin: 14px 0 0;
-  padding: 14px 16px;
-  border-radius: 16px;
+  margin: 6px 0 0;
+  padding: 7px 10px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
 
 .noticeText {
@@ -466,20 +518,91 @@
 }
 
 .modalCard {
-  width: min(760px, 100%);
-  margin-top: 24px;
-  max-height: calc(100dvh - 48px);
+  width: min(680px, 100%);
+  margin-top: 12px;
+  max-height: calc(100dvh - 32px);
   overflow-y: auto;
 }
 
 .previewHero strong {
   display: block;
-  margin-top: 10px;
-  font-size: 1.5rem;
+  margin-top: 6px;
+  font-size: 1.2rem;
+}
+
+.historyCount {
+  font-size: 0.75rem;
+  color: rgba(20, 52, 52, 0.5);
+  margin-bottom: 4px;
+}
+
+.paginationRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid rgba(20, 52, 52, 0.07);
+  margin-top: 6px;
+}
+
+.paginationBtn {
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(20, 52, 52, 0.12);
+  color: #374151;
+  background: rgba(255, 255, 255, 0.88);
+  cursor: pointer;
+  transition: opacity 120ms ease;
+}
+
+.paginationBtn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.paginationInfo {
+  font-size: 0.75rem;
+  color: rgba(20, 52, 52, 0.55);
+}
+
+.ghostButton {
+  border: 0;
+  cursor: pointer;
+  transition: transform 140ms ease, opacity 140ms ease;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 12px;
+  background: rgba(20, 52, 52, 0.06);
+  color: #244848;
+}
+
+.ruleList {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(239, 248, 246, 0.14);
+  color: rgba(239, 248, 246, 0.9);
+  font-size: 0.82rem;
+}
+
+.statusHint {
+  color: rgba(239, 248, 246, 0.78);
+  font-size: 0.85rem;
+  margin-top: 6px;
 }
 
 .primaryButton:hover:not(:disabled),
 .secondaryButton:hover,
+.ghostButton:hover,
 .flipButton:hover,
 .closeButton:hover,
 .segmentButton:hover,
@@ -531,5 +654,10 @@
   .historyMeta {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .modalActions .primaryButton,
+  .modalActions .secondaryButton {
+    white-space: normal;
   }
 }
