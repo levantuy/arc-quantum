@@ -42,7 +42,7 @@ export default function BalancePage() {
 
   return (
     <section className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-900 p-6 shadow-sm max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">Unified Balance</h1>
+      <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">Unified Balance</h2>
       <div className="flex items-center gap-4 mb-4">
         {address && <span className="text-slate-700 dark:text-slate-300 text-sm">{shortenAddress(address)}</span>}
         <Button onClick={refresh} disabled={loading || !connected} className="ml-auto">

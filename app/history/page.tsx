@@ -46,10 +46,7 @@ export default function HistoryPage() {
   if (!connected) {
     return (
       <section className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-gray-900 p-8 shadow-sm text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-700 dark:text-amber-400">
-          History
-        </p>
-        <h1 className="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">Transaction History</h1>
+        <h2 className="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">Transaction History</h2>
         <p className="mt-4 text-slate-500 dark:text-slate-400">
           Please connect your wallet to view transaction history.
         </p>

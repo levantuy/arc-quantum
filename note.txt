@@ -1,0 +1,10 @@
+Để thiết kế trang About với thông tin liên hệ và feedback, bạn vui lòng xác nhận giúp tôi các ý sau:
+
+1. Thông tin liên hệ bạn muốn hiển thị là gì? email, Telegram, Discord, phone, facebook, twitter, linkedin, github
+2. Feedback chỉ cần là một form gửi email, hay bạn muốn lưu vào hệ thống, hay chỉ là link tới Google Form/Typeform? gửi email thì bạn muốn gửi về email nào? levantuy.it@gmail.com 
+3. Có muốn thêm mô tả về Arc Quantum, đội ngũ, hoặc sứ mệnh trên trang About không? Có thể là một đoạn văn ngắn hoặc một số điểm nổi bật.
+4. Có cần xác thực (captcha, đăng nhập) cho phần feedback không? có
+
+Bạn xác nhận hoặc bổ sung giúp tôi nhé!
+
+Cần làm rõ thông tin gì trước khi thực hiện hãy hỏi tôi.
