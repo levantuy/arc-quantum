@@ -1,6 +1,8 @@
 import Link from 'next/link';
 
-const modules = [  
+import { Section } from '@/components/ui/Section';
+
+const modules = [
   {
     name: 'Balance',
     href: '/balance',
@@ -51,22 +53,133 @@ const modules = [
   },
 ];
 
+const featuredProjects = [
+  {
+    name: 'Arc Auto Trade',
+    href: 'https://arc-auto-trade-web.vercel.app/',
+    category: 'Trading Automation',
+    description: 'Automate strategy execution with a streamlined workflow for active Arc participants.',
+  },
+  {
+    name: 'Arc Network',
+    href: 'https://arc-quantum.vercel.app/balance',
+    category: 'Wallet Operations',
+    description: 'Monitor balances and access the core Arc Quantum experience from a single entry point.',
+  },
+  {
+    name: 'GT Market',
+    href: 'https://gt-market.vercel.app/vi',
+    category: 'NFT Marketplace',
+    description: 'Explore, list, and trade NFT assets in a marketplace tuned for collector flows.',
+  },
+  {
+    name: 'Arc Pay',
+    href: 'https://arc-p2p-payments.vercel.app/sign-in',
+    category: 'Payments',
+    description: 'Run peer-to-peer payment flows with a simple onboarding path and transaction access.',
+  },
+  {
+    name: 'Arc Fintech Starter',
+    href: 'https://arc-fintech-three.vercel.app/',
+    category: 'Starter Kit',
+    description: 'Use a launch-ready reference app for fintech products built on Arc primitives.',
+  },
+  {
+    name: 'Workflow Escrow',
+    href: 'https://arc-escrow-phi.vercel.app/',
+    category: 'Escrow Automation',
+    description: 'Structure milestone-based releases with an escrow flow designed for collaborative deals.',
+  },
+  {
+    name: 'Arc Commerce',
+    href: 'https://arc-commerce-rho.vercel.app/',
+    category: 'Commerce',
+    description: 'Power checkout and order flows for commerce experiences anchored in Arc payments.',
+  },
+  {
+    name: 'Multichain Gateway Wallet',
+    href: 'https://arc-multichain-wallet.vercel.app/',
+    category: 'Multichain Wallet',
+    description: 'Manage funds across chains with a wallet experience built for gateway-style transfers.',
+  },
+  {
+    name: 'My Day',
+    href: 'https://import-day-web.vercel.app/login',
+    category: 'Productivity',
+    description: 'Track daily execution in a compact workspace that complements broader Arc operations.',
+  },
+] as const;
+
 export default function HomePage() {
   return (
     <div className="flex flex-col items-center py-12">
-      <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">Arc Quantum</h1>
-      <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl text-center mb-8">
-        Arc Quantum is a modern DeFi application on Arc Network, providing seamless asset management, cross-chain transfers, and token swaps. Explore the modules below to get started.
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-4xl">
+      <Section
+        eyebrow="Arc Quantum"
+        title="DeFi workflows and Arc ecosystem access in one place"
+        description="Arc Quantum is a modern DeFi application on Arc Network, providing seamless asset management, cross-chain transfers, and token swaps. Explore the modules below to get started."
+        className="max-w-5xl"
+        contentClassName="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
+      >
         {modules.map((mod) => (
-          <Link key={mod.name} href={mod.href} className="group rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 p-6 flex flex-col items-center shadow-sm hover:shadow-md transition hover:border-sky-400 dark:hover:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
-            <div className="mb-3">{mod.icon}</div>
-            <div className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-sky-600 dark:group-hover:text-sky-400 mb-1">{mod.name}</div>
-            <div className="text-gray-500 dark:text-gray-400 text-sm text-center">{mod.desc}</div>
+          <Link
+            key={mod.name}
+            href={mod.href}
+            className="group rounded-2xl border border-gray-200/90 bg-white/90 p-6 shadow-sm transition hover:-translate-y-1 hover:border-sky-400 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-400 dark:border-gray-700 dark:bg-slate-900/90 dark:hover:border-sky-500"
+          >
+            <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-100 dark:bg-sky-950/40 dark:ring-sky-900/70">
+              {mod.icon}
+            </div>
+            <div className="mb-1 text-xl font-semibold text-gray-900 transition group-hover:text-sky-600 dark:text-gray-100 dark:group-hover:text-sky-400">
+              {mod.name}
+            </div>
+            <div className="text-sm leading-6 text-gray-500 dark:text-gray-400">{mod.desc}</div>
           </Link>
         ))}
-      </div>
+      </Section>
+
+      <Section
+        eyebrow="Featured Projects"
+        title="Discover the broader Arc ecosystem"
+        description="A curated set of Arc-native products and companion apps that extend trading, payments, commerce, wallet, and operations use cases beyond the core Arc Quantum modules."
+        className="mt-16 max-w-6xl"
+        contentClassName="grid grid-cols-1 gap-5 lg:grid-cols-2"
+      >
+        {featuredProjects.map((project, index) => (
+          <Link
+            key={project.name}
+            href={project.href}
+            target="_blank"
+            rel="noreferrer"
+            className="group relative overflow-hidden rounded-2xl border border-gray-200/90 bg-white/90 p-6 shadow-sm transition hover:-translate-y-1 hover:border-sky-400 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-400 dark:border-gray-700 dark:bg-slate-900/90 dark:hover:border-sky-500"
+          >
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-sky-500 via-cyan-400 to-emerald-400 opacity-70" />
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-3">
+                <div className="inline-flex rounded-full border border-sky-100 bg-sky-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-300">
+                  {project.category}
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 transition group-hover:text-sky-600 dark:text-gray-100 dark:group-hover:text-sky-400">
+                    {project.name}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-500 dark:text-gray-400">
+                    {project.description}
+                  </p>
+                </div>
+              </div>
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gray-100 text-sm font-semibold text-gray-600 transition group-hover:bg-sky-100 group-hover:text-sky-700 dark:bg-slate-800 dark:text-gray-300 dark:group-hover:bg-sky-950/60 dark:group-hover:text-sky-300">
+                {(index + 1).toString().padStart(2, '0')}
+              </div>
+            </div>
+            <div className="mt-5 flex items-center justify-between border-t border-gray-100 pt-4 text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400">
+              <span>Open project</span>
+              <span className="font-medium text-sky-700 transition group-hover:translate-x-1 dark:text-sky-300">
+                Visit site →
+              </span>
+            </div>
+          </Link>
+        ))}
+      </Section>
     </div>
   );
 }
