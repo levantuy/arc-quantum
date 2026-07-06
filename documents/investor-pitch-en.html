@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arc Quantum | Investor Pitch</title>
+  <meta
+    name="description"
+    content="Investor presentation for Arc Quantum: a DeFi product simplifying bridge, swap, unified balance, and send flows on Arc Network."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #08111f;
+      --bg-soft: #101d31;
+      --panel: rgba(10, 19, 34, 0.84);
+      --panel-strong: rgba(8, 17, 31, 0.96);
+      --line: rgba(145, 201, 255, 0.16);
+      --text: #f5f7fb;
+      --muted: #d2deee;
+      --muted-strong: #e4edf8;
+      --accent: #58d4ff;
+      --accent-2: #67f0b1;
+      --accent-3: #ffd166;
+      --danger: #ff8b8b;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(88, 212, 255, 0.18), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(103, 240, 177, 0.16), transparent 22%),
+        linear-gradient(180deg, #08111f 0%, #091624 34%, #07111b 100%);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(18px);
+    }
+
+    body::before {
+      width: 340px;
+      height: 340px;
+      top: 8%;
+      right: -100px;
+      background: rgba(88, 212, 255, 0.12);
+      border-radius: 50%;
+      animation: floatA 14s ease-in-out infinite;
+    }
+
+    body::after {
+      width: 260px;
+      height: 260px;
+      bottom: 12%;
+      left: -70px;
+      background: rgba(103, 240, 177, 0.1);
+      border-radius: 50%;
+      animation: floatB 16s ease-in-out infinite;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      padding: 28px 0 80px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 22px;
+      margin-bottom: 26px;
+      background: rgba(8, 17, 31, 0.7);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(88, 212, 255, 0.18), rgba(103, 240, 177, 0.22));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .brand-copy strong,
+    .hero-copy h1,
+    h2,
+    h3,
+    .metric strong,
+    .quote,
+    .cta-card h3 {
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 0.98rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .brand-copy span,
+    .topbar-note,
+    .eyebrow,
+    .card p,
+    .list li,
+    .timeline-item p,
+    .footer-note,
+    .caption,
+    .note {
+      color: var(--muted);
+    }
+
+    .lead,
+    .thesis-box p,
+    .highlight-box p,
+    .ask-box p,
+    .section > p,
+    .cta-card p,
+    .badge,
+    .metric span {
+      color: var(--muted-strong);
+    }
+
+    .topbar-note {
+      font-size: 0.92rem;
+      text-align: right;
+      max-width: 380px;
+      line-height: 1.6;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(280px, 0.82fr);
+      gap: 28px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .hero-panel,
+    .side-panel,
+    .section,
+    .cta-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-panel {
+      overflow: hidden;
+      position: relative;
+      padding: 46px;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(88, 212, 255, 0.08), transparent 32%),
+        linear-gradient(330deg, rgba(103, 240, 177, 0.08), transparent 24%);
+      pointer-events: none;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 0 6px rgba(88, 212, 255, 0.1);
+    }
+
+    .hero-copy h1 {
+      margin: 0;
+      font-size: clamp(2.6rem, 5vw, 5.4rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      max-width: 12ch;
+    }
+
+    .hero-copy .lead {
+      max-width: 62ch;
+      margin: 22px 0 28px;
+      font-size: 1.08rem;
+      line-height: 1.75;
+      color: var(--muted-strong);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .button,
+    .button-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .button {
+      color: #041019;
+      background: linear-gradient(135deg, var(--accent), #9af3ff);
+      box-shadow: 0 14px 30px rgba(88, 212, 255, 0.24);
+    }
+
+    .button-ghost {
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .button:hover,
+    .button-ghost:hover {
+      transform: translateY(-1px);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .metric span {
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .side-panel {
+      padding: 28px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .side-panel::after {
+      content: "";
+      position: absolute;
+      inset: auto -30px -70px auto;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255, 209, 102, 0.24), transparent 65%);
+      pointer-events: none;
+    }
+
+    .thesis-box,
+    .highlight-box,
+    .ask-box {
+      position: relative;
+      z-index: 1;
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .label {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: var(--accent-3);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .thesis-box h2,
+    .highlight-box h3,
+    .ask-box h3,
+    .section h2,
+    .cta-card h3 {
+      margin: 0 0 12px;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .thesis-box p,
+    .highlight-box p,
+    .ask-box p,
+    .section > p,
+    .cta-card p {
+      margin: 0;
+      line-height: 1.7;
+      color: var(--muted-strong);
+    }
+
+    .ask-box {
+      border-color: rgba(255, 209, 102, 0.2);
+      background: linear-gradient(180deg, rgba(255, 209, 102, 0.07), rgba(255, 255, 255, 0.04));
+    }
+
+    .deck {
+      display: grid;
+      gap: 22px;
+    }
+
+    .section {
+      padding: 34px;
+    }
+
+    h2 {
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      letter-spacing: -0.04em;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .section-header p {
+      max-width: 62ch;
+      margin: 0;
+    }
+
+    .grid-3,
+    .grid-4,
+    .grid-2 {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(88, 212, 255, 0.6), transparent 60%);
+      opacity: 0.8;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.12rem;
+      letter-spacing: -0.02em;
+    }
+
+    .card p {
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    .card .index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      margin-bottom: 14px;
+      border-radius: 12px;
+      background: rgba(88, 212, 255, 0.12);
+      color: var(--accent);
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+    }
+
+    .quote {
+      font-size: clamp(1.45rem, 2.7vw, 2rem);
+      line-height: 1.4;
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+
+    .quote-wrap {
+      display: grid;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .list li {
+      margin-bottom: 10px;
+      line-height: 1.65;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: var(--muted-strong);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-2);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr);
+      gap: 18px;
+      padding: 18px 20px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .timeline-item strong {
+      color: var(--accent-3);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1rem;
+    }
+
+    .timeline-item h3 {
+      margin: 0 0 6px;
+      font-size: 1.08rem;
+    }
+
+    .timeline-item p {
+      margin: 0;
+      line-height: 1.65;
+    }
+
+    .cta-card {
+      margin-top: 4px;
+      padding: 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      background:
+        linear-gradient(135deg, rgba(88, 212, 255, 0.1), rgba(103, 240, 177, 0.08)),
+        var(--panel-strong);
+    }
+
+    .cta-card p {
+      max-width: 62ch;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .accent {
+      color: var(--accent);
+    }
+
+    .warning {
+      color: var(--danger);
+    }
+
+    .caption {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--muted-strong);
+    }
+
+    .divider {
+      height: 1px;
+      margin: 28px 0;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(145, 201, 255, 0.22), rgba(255, 255, 255, 0));
+    }
+
+    @keyframes floatA {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(-18px, 20px, 0); }
+    }
+
+    @keyframes floatB {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(14px, -18px, 0); }
+    }
+
+    @media (max-width: 1024px) {
+      .hero,
+      .cta-card,
+      .grid-4,
+      .grid-3,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel,
+      .section,
+      .cta-card {
+        padding: 28px;
+      }
+
+      .hero-copy h1 {
+        max-width: none;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        width: min(calc(100% - 20px), var(--max));
+        padding-top: 18px;
+        padding-bottom: 48px;
+      }
+
+      .topbar {
+        border-radius: 28px;
+        padding: 18px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .topbar-note {
+        text-align: left;
+      }
+
+      .hero-panel,
+      .side-panel,
+      .section,
+      .cta-card {
+        border-radius: 24px;
+      }
+
+      .hero-copy h1 {
+        font-size: 2.4rem;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+
+    @page {
+      margin: 12mm;
+      size: A4;
+    }
+
+    @media print {
+      body {
+        background: #eef4fb;
+        color: #0f172a;
+      }
+
+      body::before,
+      body::after {
+        display: none;
+      }
+
+      .shell {
+        width: 100%;
+        max-width: none;
+        padding: 0;
+      }
+
+      .hero-panel,
+      .side-panel,
+      .section,
+      .cta-card,
+      .topbar,
+      .card,
+      .metric,
+      .timeline-item,
+      .thesis-box,
+      .highlight-box,
+      .ask-box {
+        color: #0f172a;
+        background: #ffffff;
+        border-color: #cbd5e1;
+        box-shadow: none;
+        backdrop-filter: none;
+      }
+
+      .hero-panel,
+      .cta-card {
+        background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+      }
+
+      .side-panel,
+      .section,
+      .topbar {
+        background: #ffffff;
+      }
+
+      .brand-mark,
+      .card .index {
+        color: #0f172a;
+        background: linear-gradient(135deg, #7dd3fc, #86efac);
+        border-color: #bae6fd;
+      }
+
+      .brand-copy strong,
+      .hero-copy h1,
+      .section h2,
+      .card h3,
+      .timeline-item h3,
+      .cta-card h3,
+      .quote,
+      .metric strong,
+      .timeline-item strong {
+        color: #0f172a;
+      }
+
+      .label,
+      .accent {
+        color: #0f766e;
+      }
+
+      .eyebrow,
+      .badge,
+      .button-ghost,
+      .metric,
+      .card,
+      .timeline-item,
+      .thesis-box,
+      .highlight-box,
+      .ask-box {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+      }
+
+      .eyebrow {
+        color: #334155;
+      }
+
+      .eyebrow::before,
+      .badge::before {
+        box-shadow: none;
+      }
+
+      .card::before {
+        background: linear-gradient(90deg, rgba(14, 165, 233, 0.55), transparent 65%);
+      }
+
+      .brand-copy span,
+      .topbar-note,
+      .card p,
+      .list li,
+      .timeline-item p,
+      .footer-note,
+      .caption,
+      .note,
+      .metric span {
+        color: #1f2937;
+      }
+
+      .lead,
+      .thesis-box p,
+      .highlight-box p,
+      .ask-box p,
+      .section > p,
+      .cta-card p,
+      .badge {
+        color: #111827;
+      }
+
+      .button,
+      .button-ghost {
+        color: #111827;
+        border: 1px solid #d1d5db;
+        background: #f9fafb;
+        box-shadow: none;
+      }
+
+      .button {
+        background: linear-gradient(135deg, #7dd3fc, #a7f3d0);
+        border-color: #a5f3fc;
+      }
+
+      .divider {
+        background: linear-gradient(90deg, rgba(148, 163, 184, 0), rgba(148, 163, 184, 0.55), rgba(148, 163, 184, 0));
+      }
+
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">AQ</div>
+        <div class="brand-copy">
+          <strong>Arc Quantum</strong>
+          <span>Investor presentation for Arc-native DeFi infrastructure</span>
+        </div>
+      </div>
+      <div class="topbar-note">
+        A product company focused on making digital asset workflows simpler, clearer, and more reliable on Arc Network.
+      </div>
+    </header>
+
+    <section class="hero">
+      <article class="hero-panel">
+        <div class="hero-copy">
+          <div class="eyebrow">Arc Network • Product layer for everyday DeFi</div>
+          <h1>The operating layer for everyday digital asset activity on Arc.</h1>
+          <p class="lead">
+            Arc Quantum is building a streamlined and transparent DeFi product for Arc Network, bringing four high-frequency actions into one unified experience: <span class="accent">Bridge</span>, <span class="accent">Swap</span>, <span class="accent">Unified Balance</span>, and <span class="accent">Send</span>.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#investment-case">Investment thesis</a>
+            <a class="button-ghost" href="#funding-plan">Use of funds</a>
+          </div>
+
+          <div class="hero-grid">
+            <div class="metric">
+              <strong>4 core modules</strong>
+              <span>Bridge, Swap, Unified Balance, and Send combined into one consistent product flow.</span>
+            </div>
+            <div class="metric">
+              <strong>Arc-first MVP</strong>
+              <span>Focused on one ecosystem first to optimize UX, reliability, and execution speed.</span>
+            </div>
+            <div class="metric">
+              <strong>Expansion-ready architecture</strong>
+              <span>Built with an admin panel, audit logs, wallet authentication, and bridge configuration to improve operating trust.</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <aside class="side-panel">
+        <div class="thesis-box" id="investment-case">
+          <div class="label">Investment Thesis</div>
+          <h2>DeFi only scales when the experience stops feeling expert-only.</h2>
+          <p>
+            Most DeFi products still require users to navigate fragmented tools while managing chains, tokens, fees, and transaction states on their own. Arc Quantum addresses that friction directly by turning the highest-value actions into one coherent product experience.
+          </p>
+        </div>
+
+        <div class="highlight-box">
+          <div class="label">Current Status</div>
+          <h3>The MVP has a clear direction and a technical foundation deep enough for commercialization.</h3>
+          <p>
+            The product already has a defined architecture with a Next.js frontend, backend APIs, PostgreSQL via Prisma, wallet authentication, configuration management, and operational logging.
+          </p>
+        </div>
+
+        <div class="ask-box">
+          <div class="label">Investor Angle</div>
+          <h3>The opportunity sits in the experience layer and the operations layer, not only in smart contracts.</h3>
+          <p>
+            As Arc expands its application base and asset flows, demand should increase for a trusted entry point covering bridging, swapping, balance management, and token transfers. Arc Quantum is positioning itself at that interaction layer.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <main class="deck">
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Problem</div>
+            <h2>Market problem</h2>
+          </div>
+          <p>DeFi adoption is constrained less by product availability than by complexity, fragmentation, and the cost of user error.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card">
+            <div class="index">01</div>
+            <h3>Too many steps, too many contexts</h3>
+            <p>Bridging, swapping, checking balances, and sending assets are often fragmented across multiple applications. That creates serious friction for non-expert users.</p>
+          </article>
+          <article class="card">
+            <div class="index">02</div>
+            <h3>Poor visibility into transaction progress</h3>
+            <p>Many interfaces only show the final result. Users struggle to understand the current state, the cause of a failure, or what to do next when something breaks.</p>
+          </article>
+          <article class="card">
+            <div class="index">03</div>
+            <h3>A gap between UX and infrastructure</h3>
+            <p>Many teams invest heavily in on-chain infrastructure while underinvesting in the product layer that makes that infrastructure usable at scale.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Solution</div>
+            <h2>How Arc Quantum solves it</h2>
+          </div>
+          <p>An Arc-native DeFi product that consolidates essential asset workflows into one clear, consistent, and operationally reliable experience.</p>
+        </div>
+
+        <div class="quote-wrap">
+          <p class="quote">“From fragmented crypto operations to one coherent Arc-native operating surface.”</p>
+          <div class="badge-row">
+            <span class="badge">Direct wallet connectivity, no private key custody</span>
+            <span class="badge">Responsive support across desktop and mobile</span>
+            <span class="badge">Designed to expand into new chains and modules</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="grid-4">
+          <article class="card">
+            <h3>Bridge</h3>
+            <p>Move assets across chains on Arc with route configuration checks, input validation, logging, and transaction-state visibility.</p>
+          </article>
+          <article class="card">
+            <h3>Swap</h3>
+            <p>Swap tokens on Arc Network through a simple interface built for mainstream users rather than trader-centric complexity.</p>
+          </article>
+          <article class="card">
+            <h3>Unified Balance</h3>
+            <p>Aggregate asset balances into a clearer portfolio view so users do not need to inspect each token or touchpoint separately.</p>
+          </article>
+          <article class="card">
+            <h3>Send</h3>
+            <p>Transfer tokens to another address with a clearer UX for payments, transfers, and everyday activity on Arc.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Why Now</div>
+            <h2>Why this timing matters</h2>
+          </div>
+          <p>As blockchain ecosystems gain more products and liquidity, the experience layer becomes a strategic advantage rather than a thin wrapper around protocols.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card">
+            <h3>Arc needs more accessible application surfaces</h3>
+            <p>If Arc expands its user base, demand for simple asset entry points should deepen across both breadth and usage intensity.</p>
+          </article>
+          <article class="card">
+            <h3>Mainstream users remain underserved</h3>
+            <p>Most DeFi products still optimize for users already comfortable with chains, bridges, and specialist tools, leaving a large gap in the new-user segment.</p>
+          </article>
+          <article class="card">
+            <h3>A focused MVP is easier to commercialize</h3>
+            <p>Starting with one ecosystem, one target user, and four high-value use cases creates a clearer path to product-market fit than expanding across multiple chains too early.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Product Moat</div>
+            <h2>Practical competitive advantage</h2>
+          </div>
+          <p>The advantage is not simply breadth of features. It is the combination of product simplicity, operational discipline, and expansion-ready architecture.</p>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Built for mainstream users</h3>
+            <ul class="list">
+              <li>Clear target audience: users who do not need deep blockchain expertise.</li>
+              <li>Fewer use cases, but the right ones with high frequency and clear value.</li>
+              <li>Strong emphasis on real-time feedback, clear transaction states, and short action flows.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>An operating base for a financial product</h3>
+            <ul class="list">
+              <li>Signature-based wallet authentication with no private keys sent to the server.</li>
+              <li>An admin panel to manage tokens and bridge configuration.</li>
+              <li>Audit logs and transaction history for control, failure handling, and transparency.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Architecture Readiness</div>
+            <h2>Current technical foundation</h2>
+          </div>
+          <p>Arc Quantum has already been structured as an independent web application with backend and data layers designed for live operations.</p>
+        </div>
+        <div class="grid-4">
+          <article class="card">
+            <h3>Frontend</h3>
+            <p>Next.js for the interface, state management, and wallet connection flows.</p>
+          </article>
+          <article class="card">
+            <h3>Backend</h3>
+            <p>API routes for validation, history, configuration, and operational workflows.</p>
+          </article>
+          <article class="card">
+            <h3>Data Layer</h3>
+            <p>PostgreSQL and Prisma for transactions, token config, bridge config, admin roles, and audit logs.</p>
+          </article>
+          <article class="card">
+            <h3>Chain Integration</h3>
+            <p>Arc Network integration with a service layer for bridge workflows, retries, and transaction-state control.</p>
+          </article>
+        </div>
+        <p class="caption">The current architecture reflects a product designed for operational use, not only for demonstration.</p>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Monetization</div>
+            <h2>Revenue paths</h2>
+          </div>
+          <p>The initial objective is to prove product usage and execution quality, then expand monetization through increasing ecosystem depth and operating leverage.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card">
+            <h3>Transaction fees</h3>
+            <p>Charge small fees on bridge, swap, or other asset flows where the UX and orchestration layer creates clear value.</p>
+          </article>
+          <article class="card">
+            <h3>B2B enablement</h3>
+            <p>Provide white-label experience infrastructure for teams in the ecosystem that need wallet, bridge, or balance layers.</p>
+          </article>
+          <article class="card">
+            <h3>Value-added services</h3>
+            <p>Expand into analytics, alerts, transaction acceleration, premium workflows, or compliance-ready admin tooling as scale increases.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="funding-plan">
+        <div class="section-header">
+          <div>
+            <div class="label">Use of Funds</div>
+            <h2>Planned capital allocation</h2>
+          </div>
+          <p>Capital will be directed toward the areas most likely to accelerate product-market fit, operational reliability, and measured growth.</p>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>1. Product completion and reliability</h3>
+            <ul class="list">
+              <li>Improve bridge flows, retry logic, transaction visibility, and failure UX.</li>
+              <li>Raise the quality of the dashboard, balance layer, and transaction history.</li>
+              <li>Increase backend stability, endpoint security, and configuration control.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>2. Early user growth</h3>
+            <ul class="list">
+              <li>Simplify onboarding for new Arc users.</li>
+              <li>Partner with ecosystem projects to create real usage flows.</li>
+              <li>Test acquisition channels focused on Arc retail users.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>3. Operations and data</h3>
+            <ul class="list">
+              <li>Build measurement systems for conversion, retention, and module-level usage behavior.</li>
+              <li>Refine admin workflows for token management, bridge routes, and audit review.</li>
+              <li>Create a stronger basis for expansion decisions around chains and new use cases.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>4. Preparing for scale</h3>
+            <ul class="list">
+              <li>Validate the strongest monetization path across fees, B2B enablement, or product-layer revenue.</li>
+              <li>Standardize the architecture for future chain and module expansion once signals are clear.</li>
+              <li>Improve the product data room for the next financing round.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Roadmap</div>
+            <h2>Proposed 12-month roadmap</h2>
+          </div>
+          <p>A focused roadmap centered on product completion, growth efficiency, and disciplined expansion.</p>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item">
+            <strong>Q1</strong>
+            <div>
+              <h3>Complete an operational MVP</h3>
+              <p>Focus on bridge, swap, send, unified balance, transaction history, wallet UX, and the admin layer for core configuration.</p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <strong>Q2</strong>
+            <div>
+              <h3>Measure and improve retention</h3>
+              <p>Deploy conversion funnel tracking, remove friction points, improve transaction completion, and strengthen trust signals in the product.</p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <strong>Q3</strong>
+            <div>
+              <h3>Expand monetizable use cases</h3>
+              <p>Test fee layers, ecosystem partnerships, and additional product surfaces built on real usage data.</p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <strong>Q4</strong>
+            <div>
+              <h3>Scale based on market signals</h3>
+              <p>Decide whether to add chains, new modules, or go deeper into the strongest vertical based on user behavior and economics.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Call To Action</div>
+            <h2>What investors are buying into</h2>
+          </div>
+          <p>A clear thesis on how Arc can become more accessible through the right product layer for everyday users and asset flows.</p>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Core thesis</h3>
+            <p>Arc Quantum is positioned to become a default operating surface for users who value simplicity, speed, and transparency when interacting with Arc Network.</p>
+          </article>
+          <article class="card">
+            <h3>Why participate early</h3>
+            <p>The company is at a stage where strategic capital can directly improve product quality, accelerate market learning, and strengthen category positioning within the ecosystem.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="cta-card">
+        <div>
+          <div class="label">Closing View</div>
+          <h3>Arc Quantum is building the product layer that can make Arc easier to use, easier to trust, and easier to scale.</h3>
+          <p>
+            By focusing on the highest-frequency digital asset workflows and pairing them with a disciplined operating foundation, the company is positioned to capture meaningful value as Arc adoption expands.
+          </p>
+        </div>
+        <div class="button">Arc Quantum</div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

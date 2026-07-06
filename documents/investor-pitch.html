@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arc Quantum | Investor Pitch</title>
+  <meta
+    name="description"
+    content="Bản trình bày giới thiệu Arc Quantum dành cho nhà đầu tư: nền tảng DeFi đơn giản hóa bridge, swap, unified balance và send trên Arc Network."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #08111f;
+      --bg-soft: #101d31;
+      --panel: rgba(10, 19, 34, 0.84);
+      --panel-strong: rgba(8, 17, 31, 0.96);
+      --line: rgba(145, 201, 255, 0.16);
+      --text: #f5f7fb;
+      --muted: #aac0dc;
+      --accent: #58d4ff;
+      --accent-2: #67f0b1;
+      --accent-3: #ffd166;
+      --danger: #ff8b8b;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(88, 212, 255, 0.18), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(103, 240, 177, 0.16), transparent 22%),
+        linear-gradient(180deg, #08111f 0%, #091624 34%, #07111b 100%);
+      min-height: 100vh;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(18px);
+    }
+
+    body::before {
+      width: 340px;
+      height: 340px;
+      top: 8%;
+      right: -100px;
+      background: rgba(88, 212, 255, 0.12);
+      border-radius: 50%;
+      animation: floatA 14s ease-in-out infinite;
+    }
+
+    body::after {
+      width: 260px;
+      height: 260px;
+      bottom: 12%;
+      left: -70px;
+      background: rgba(103, 240, 177, 0.1);
+      border-radius: 50%;
+      animation: floatB 16s ease-in-out infinite;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      padding: 28px 0 80px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 22px;
+      margin-bottom: 26px;
+      background: rgba(8, 17, 31, 0.7);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(88, 212, 255, 0.18), rgba(103, 240, 177, 0.22));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .brand-copy strong,
+    .hero-copy h1,
+    h2,
+    h3,
+    .metric strong,
+    .quote,
+    .cta-card h3 {
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 0.98rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .brand-copy span,
+    .topbar-note,
+    .eyebrow,
+    .card p,
+    .list li,
+    .timeline-item p,
+    .footer-note,
+    .caption,
+    .note {
+      color: var(--muted);
+    }
+
+    .topbar-note {
+      font-size: 0.92rem;
+      text-align: right;
+      max-width: 380px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(280px, 0.82fr);
+      gap: 28px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .hero-panel,
+    .side-panel,
+    .section,
+    .cta-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-panel {
+      overflow: hidden;
+      position: relative;
+      padding: 46px;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(88, 212, 255, 0.08), transparent 32%),
+        linear-gradient(330deg, rgba(103, 240, 177, 0.08), transparent 24%);
+      pointer-events: none;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 0 6px rgba(88, 212, 255, 0.1);
+    }
+
+    .hero-copy h1 {
+      margin: 0;
+      font-size: clamp(2.6rem, 5vw, 5.4rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      max-width: 12ch;
+    }
+
+    .hero-copy .lead {
+      max-width: 62ch;
+      margin: 22px 0 28px;
+      font-size: 1.08rem;
+      line-height: 1.75;
+      color: #dce8f6;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .button,
+    .button-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .button {
+      color: #041019;
+      background: linear-gradient(135deg, var(--accent), #9af3ff);
+      box-shadow: 0 14px 30px rgba(88, 212, 255, 0.24);
+    }
+
+    .button-ghost {
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .button:hover,
+    .button-ghost:hover {
+      transform: translateY(-1px);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .metric span {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .side-panel {
+      padding: 28px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .side-panel::after {
+      content: "";
+      position: absolute;
+      inset: auto -30px -70px auto;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255, 209, 102, 0.24), transparent 65%);
+      pointer-events: none;
+    }
+
+    .thesis-box,
+    .highlight-box,
+    .ask-box {
+      position: relative;
+      z-index: 1;
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .label {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: var(--accent-3);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .thesis-box h2,
+    .highlight-box h3,
+    .ask-box h3,
+    .section h2,
+    .cta-card h3 {
+      margin: 0 0 12px;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .thesis-box p,
+    .highlight-box p,
+    .ask-box p,
+    .section > p,
+    .cta-card p {
+      margin: 0;
+      line-height: 1.7;
+      color: #dbe7f5;
+    }
+
+    .ask-box {
+      border-color: rgba(255, 209, 102, 0.2);
+      background: linear-gradient(180deg, rgba(255, 209, 102, 0.07), rgba(255, 255, 255, 0.04));
+    }
+
+    .deck {
+      display: grid;
+      gap: 22px;
+    }
+
+    .section {
+      padding: 34px;
+    }
+
+    h2 {
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      letter-spacing: -0.04em;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .section-header p {
+      max-width: 62ch;
+      margin: 0;
+    }
+
+    .grid-3,
+    .grid-4,
+    .grid-2 {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(88, 212, 255, 0.6), transparent 60%);
+      opacity: 0.8;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.12rem;
+      letter-spacing: -0.02em;
+    }
+
+    .card p {
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    .card .index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      margin-bottom: 14px;
+      border-radius: 12px;
+      background: rgba(88, 212, 255, 0.12);
+      color: var(--accent);
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+    }
+
+    .quote {
+      font-size: clamp(1.45rem, 2.7vw, 2rem);
+      line-height: 1.4;
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+
+    .quote-wrap {
+      display: grid;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .list li {
+      margin-bottom: 10px;
+      line-height: 1.65;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: #dce8f6;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-2);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr);
+      gap: 18px;
+      padding: 18px 20px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .timeline-item strong {
+      color: var(--accent-3);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1rem;
+    }
+
+    .timeline-item h3 {
+      margin: 0 0 6px;
+      font-size: 1.08rem;
+    }
+
+    .timeline-item p {
+      margin: 0;
+      line-height: 1.65;
+    }
+
+    .cta-card {
+      margin-top: 4px;
+      padding: 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      background:
+        linear-gradient(135deg, rgba(88, 212, 255, 0.1), rgba(103, 240, 177, 0.08)),
+        var(--panel-strong);
+    }
+
+    .cta-card p {
+      max-width: 62ch;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .accent {
+      color: var(--accent);
+    }
+
+    .warning {
+      color: var(--danger);
+    }
+
+    .caption {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .divider {
+      height: 1px;
+      margin: 28px 0;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(145, 201, 255, 0.22), rgba(255, 255, 255, 0));
+    }
+
+    @keyframes floatA {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(-18px, 20px, 0); }
+    }
+
+    @keyframes floatB {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(14px, -18px, 0); }
+    }
+
+    @media (max-width: 1024px) {
+      .hero,
+      .cta-card,
+      .grid-4,
+      .grid-3,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel,
+      .section,
+      .cta-card {
+        padding: 28px;
+      }
+
+      .hero-copy h1 {
+        max-width: none;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        width: min(calc(100% - 20px), var(--max));
+        padding-top: 18px;
+        padding-bottom: 48px;
+      }
+
+      .topbar {
+        border-radius: 28px;
+        padding: 18px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .topbar-note {
+        text-align: left;
+      }
+
+      .hero-panel,
+      .side-panel,
+      .section,
+      .cta-card {
+        border-radius: 24px;
+      }
+
+      .hero-copy h1 {
+        font-size: 2.4rem;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        color: #111827;
+      }
+
+      body::before,
+      body::after {
+        display: none;
+      }
+
+      .hero-panel,
+      .side-panel,
+      .section,
+      .cta-card,
+      .topbar,
+      .card,
+      .metric,
+      .timeline-item,
+      .thesis-box,
+      .highlight-box,
+      .ask-box {
+        color: #111827;
+        background: #ffffff;
+        border-color: #d1d5db;
+        box-shadow: none;
+      }
+
+      .brand-copy span,
+      .topbar-note,
+      .card p,
+      .list li,
+      .timeline-item p,
+      .footer-note,
+      .caption,
+      .note,
+      .metric span {
+        color: #4b5563;
+      }
+
+      .button,
+      .button-ghost {
+        color: #111827;
+        border: 1px solid #d1d5db;
+        background: #f9fafb;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">AQ</div>
+        <div class="brand-copy">
+          <strong>Arc Quantum</strong>
+          <span>Investor presentation for Arc-native DeFi infrastructure</span>
+        </div>
+      </div>
+      <div class="topbar-note">
+        Tài liệu giới thiệu độc lập để gửi nhà đầu tư. Không phụ thuộc route của ứng dụng và có thể mở trực tiếp bằng trình duyệt.
+      </div>
+    </header>
+
+    <section class="hero">
+      <article class="hero-panel">
+        <div class="hero-copy">
+          <div class="eyebrow">Arc Network • DeFi cho người dùng phổ thông</div>
+          <h1>Đơn giản hóa trải nghiệm tài sản số trên Arc.</h1>
+          <p class="lead">
+            Arc Quantum đang xây dựng một lớp trải nghiệm DeFi gọn, minh bạch và dễ dùng cho người dùng phổ thông trên Arc Network, hội tụ bốn thao tác cốt lõi trong một sản phẩm: <span class="accent">Bridge</span>, <span class="accent">Swap</span>, <span class="accent">Unified Balance</span> và <span class="accent">Send</span>.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#investment-case">Luận điểm đầu tư</a>
+            <a class="button-ghost" href="#funding-plan">Kế hoạch sử dụng vốn</a>
+          </div>
+
+          <div class="hero-grid">
+            <div class="metric">
+              <strong>4 module cốt lõi</strong>
+              <span>Bridge, Swap, Unified Balance và Send trong một luồng sản phẩm thống nhất.</span>
+            </div>
+            <div class="metric">
+              <strong>Arc-first MVP</strong>
+              <span>Tập trung một hệ sinh thái trước để tối ưu UX, độ ổn định và tốc độ triển khai.</span>
+            </div>
+            <div class="metric">
+              <strong>Kiến trúc sẵn sàng mở rộng</strong>
+              <span>Thiết kế có admin panel, audit log, xác thực ví và cấu hình bridge để tăng độ tin cậy vận hành.</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <aside class="side-panel">
+        <div class="thesis-box" id="investment-case">
+          <div class="label">Investment Thesis</div>
+          <h2>DeFi sẽ chỉ mở rộng khi trải nghiệm không còn mang tính “chuyên gia”.</h2>
+          <p>
+            Phần lớn sản phẩm DeFi vẫn buộc người dùng phải tự ghép nhiều công cụ, tự hiểu chain, token, phí và trạng thái giao dịch. Arc Quantum chọn giải một bài toán thực tế hơn: gom các hành động giá trị cao nhất vào một giao diện mạch lạc cho người dùng phổ thông.
+          </p>
+        </div>
+
+        <div class="highlight-box">
+          <div class="label">Current Status</div>
+          <h3>MVP có định hướng rõ và nền móng kỹ thuật đủ sâu để thương mại hóa.</h3>
+          <p>
+            Dự án đã được thiết kế với frontend Next.js, backend API, cơ sở dữ liệu PostgreSQL qua Prisma, cơ chế xác thực ví, quản trị cấu hình và logging phục vụ kiểm soát vận hành.
+          </p>
+        </div>
+
+        <div class="ask-box">
+          <div class="label">Investor Angle</div>
+          <h3>Cơ hội nằm ở lớp trải nghiệm và lớp vận hành, không chỉ ở smart contract.</h3>
+          <p>
+            Nếu Arc tiếp tục tăng số lượng ứng dụng và dòng tài sản, nhu cầu về một điểm vào đơn giản cho bridge, swap, quản lý số dư và chuyển token sẽ tăng tương ứng. Arc Quantum định vị ở đúng lớp tương tác đó.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <main class="deck">
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Problem</div>
+            <h2>Vấn đề thị trường</h2>
+          </div>
+          <p>Người dùng mới không rời bỏ DeFi vì thiếu sản phẩm, mà vì chi phí học quá cao và rủi ro thao tác quá lớn.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card">
+            <div class="index">01</div>
+            <h3>Quá nhiều bước, quá nhiều bối cảnh</h3>
+            <p>Bridge, swap, kiểm tra số dư và gửi tài sản thường tách rời giữa nhiều ứng dụng. Điều này tạo ma sát lớn cho người dùng không chuyên.</p>
+          </article>
+          <article class="card">
+            <div class="index">02</div>
+            <h3>Thiếu minh bạch trong tiến trình giao dịch</h3>
+            <p>Nhiều giao diện chỉ hiển thị kết quả cuối cùng. Người dùng khó hiểu trạng thái hiện tại, nguyên nhân lỗi hoặc cách xử lý khi giao dịch thất bại.</p>
+          </article>
+          <article class="card">
+            <div class="index">03</div>
+            <h3>Khoảng trống giữa UX và hạ tầng</h3>
+            <p>Nhiều đội tập trung vào hạ tầng on-chain nhưng chưa đầu tư đủ vào lớp sản phẩm giúp người dùng phổ thông sử dụng hạ tầng đó một cách an toàn.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Solution</div>
+            <h2>Arc Quantum giải quyết bài toán như thế nào</h2>
+          </div>
+          <p>Một ứng dụng DeFi độc lập, tối ưu cho Arc Network, gom các tác vụ trọng yếu vào trải nghiệm thống nhất và dễ hiểu.</p>
+        </div>
+
+        <div class="quote-wrap">
+          <p class="quote">“From fragmented crypto operations to one coherent Arc-native operating surface.”</p>
+          <div class="badge-row">
+            <span class="badge">Wallet kết nối trực tiếp, không giữ private key</span>
+            <span class="badge">Hỗ trợ responsive desktop và mobile</span>
+            <span class="badge">Thiết kế để mở rộng sang chain và module mới</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="grid-4">
+          <article class="card">
+            <h3>Bridge</h3>
+            <p>Chuyển tài sản giữa các chain trong Arc với kiểm tra cấu hình, validate đầu vào, lưu log và khả năng theo dõi trạng thái giao dịch.</p>
+          </article>
+          <article class="card">
+            <h3>Swap</h3>
+            <p>Hoán đổi token trên Arc Network với trải nghiệm thao tác đơn giản, phù hợp người dùng phổ thông thay vì quy trình trader-centric.</p>
+          </article>
+          <article class="card">
+            <h3>Unified Balance</h3>
+            <p>Tổng hợp tài sản và số dư theo cách dễ hiểu hơn, giúp người dùng không phải tự kiểm tra từng token hoặc từng điểm chạm riêng lẻ.</p>
+          </article>
+          <article class="card">
+            <h3>Send</h3>
+            <p>Gửi token cho địa chỉ khác với UX rõ ràng, phù hợp cho nhu cầu thanh toán, chuyển tiền và thao tác hàng ngày trên Arc.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Why Now</div>
+            <h2>Tại sao thời điểm này phù hợp</h2>
+          </div>
+          <p>Khi hệ sinh thái tăng sản phẩm và thanh khoản, lớp trải nghiệm người dùng sẽ trở thành một lợi thế cạnh tranh riêng thay vì chỉ là phần phụ của protocol.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card">
+            <h3>Arc đang cần lớp ứng dụng dễ tiếp cận</h3>
+            <p>Nếu Arc mở rộng người dùng, nhu cầu với sản phẩm entry-point đơn giản cho tài sản số sẽ tăng theo cả chiều rộng lẫn chiều sâu.</p>
+          </article>
+          <article class="card">
+            <h3>Người dùng phổ thông là thị trường chưa được phục vụ đúng mức</h3>
+            <p>Đa số sản phẩm DeFi vẫn tối ưu cho người dùng đã quen chain, bridge và các công cụ chuyên sâu, để lại khoảng trống lớn ở phân khúc mới.</p>
+          </article>
+          <article class="card">
+            <h3>MVP chuyên sâu dễ tiến tới thương mại hóa</h3>
+            <p>Bắt đầu với một hệ sinh thái, một persona và bốn use case quan trọng giúp kiểm soát chi phí tốt hơn so với mở rộng đa chain quá sớm.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Product Moat</div>
+            <h2>Lợi thế cạnh tranh thực tế</h2>
+          </div>
+          <p>Lợi thế không nằm ở lời hứa “all-in-one” đơn thuần, mà ở khả năng kết hợp UX đơn giản với nền vận hành đủ chặt để mở rộng.</p>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Thiết kế cho người dùng phổ thông</h3>
+            <ul class="list">
+              <li>Chọn rõ đối tượng mục tiêu là người không cần kiến thức blockchain sâu.</li>
+              <li>Tập trung làm ít use case nhưng đúng use case có tần suất cao.</li>
+              <li>Ưu tiên phản hồi thời gian thực, trạng thái giao dịch rõ ràng và thao tác ngắn.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Nền móng vận hành cho sản phẩm tài chính</h3>
+            <ul class="list">
+              <li>Xác thực ví bằng chữ ký, không đưa private key lên server.</li>
+              <li>Admin panel để quản lý token và cấu hình bridge.</li>
+              <li>Audit log và transaction history phục vụ kiểm soát, xử lý lỗi và minh bạch hóa.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Architecture Readiness</div>
+            <h2>Nền tảng kỹ thuật hiện tại</h2>
+          </div>
+          <p>Arc Quantum không chỉ là mockup sản phẩm; dự án đã được định hình thành một web app độc lập với lớp backend và dữ liệu phục vụ vận hành.</p>
+        </div>
+        <div class="grid-4">
+          <article class="card">
+            <h3>Frontend</h3>
+            <p>Next.js cho giao diện, state management và luồng kết nối ví.</p>
+          </article>
+          <article class="card">
+            <h3>Backend</h3>
+            <p>API routes xử lý validation, history, config và các tác vụ vận hành.</p>
+          </article>
+          <article class="card">
+            <h3>Data Layer</h3>
+            <p>PostgreSQL và Prisma để quản lý transaction, token config, bridge config, admin và audit log.</p>
+          </article>
+          <article class="card">
+            <h3>Chain Integration</h3>
+            <p>Tích hợp Arc Network và thiết kế service layer cho bridge, retry flow và kiểm soát trạng thái giao dịch.</p>
+          </article>
+        </div>
+        <p class="caption">Điểm mạnh với nhà đầu tư: kiến trúc hiện tại cho thấy dự án đang đi theo hướng sản phẩm có thể vận hành thật, không chỉ dừng ở giao diện demo.</p>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Monetization</div>
+            <h2>Hướng tạo doanh thu</h2>
+          </div>
+          <p>Mục tiêu giai đoạn đầu là chứng minh mức độ sử dụng và độ mượt của sản phẩm; các lớp doanh thu có thể mở dần theo chiều sâu của hệ sinh thái.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card">
+            <h3>Fee theo giao dịch</h3>
+            <p>Thu phí nhỏ trên bridge, swap hoặc các giao dịch có giá trị gia tăng từ lớp UX và orchestration.</p>
+          </article>
+          <article class="card">
+            <h3>B2B enablement</h3>
+            <p>Cung cấp hạ tầng giao diện hoặc trải nghiệm white-label cho các đội trong hệ sinh thái cần ví, bridge hoặc balance layer.</p>
+          </article>
+          <article class="card">
+            <h3>Value-added services</h3>
+            <p>Mở rộng sang analytics, alert, transaction acceleration, premium workflow hoặc compliance-ready admin tooling khi quy mô tăng.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="funding-plan">
+        <div class="section-header">
+          <div>
+            <div class="label">Use of Funds</div>
+            <h2>Kế hoạch sử dụng vốn</h2>
+          </div>
+          <p>Phần này được trình bày theo logic sử dụng vốn để tăng xác suất product-market fit, không gắn số liệu giả định chưa kiểm chứng.</p>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>1. Hoàn thiện sản phẩm và độ tin cậy</h3>
+            <ul class="list">
+              <li>Tối ưu bridge flow, retry flow, quan sát trạng thái giao dịch và UX lỗi.</li>
+              <li>Nâng chất lượng dashboard, balance layer và lịch sử giao dịch.</li>
+              <li>Tăng độ ổn định backend, bảo mật endpoint và kiểm soát cấu hình.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>2. Tăng trưởng người dùng sớm</h3>
+            <ul class="list">
+              <li>Onboarding đơn giản cho người dùng Arc mới.</li>
+              <li>Hợp tác với dự án trong hệ sinh thái để có flow sử dụng thật.</li>
+              <li>Thử nghiệm kênh acquisition tập trung vào nhóm người dùng retail trên Arc.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>3. Vận hành và dữ liệu</h3>
+            <ul class="list">
+              <li>Xây dựng bộ đo lường conversion, retention và hành vi thao tác theo module.</li>
+              <li>Hoàn thiện admin workflow cho token, bridge route và audit review.</li>
+              <li>Tạo nền để ra quyết định mở rộng chain hoặc mở rộng use case có căn cứ hơn.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>4. Chuẩn bị cho giai đoạn mở rộng</h3>
+            <ul class="list">
+              <li>Xác thực mô hình doanh thu phù hợp nhất từ fee, B2B hoặc product layer.</li>
+              <li>Chuẩn hóa kiến trúc để tích hợp thêm module hoặc chain khi đã có tín hiệu.</li>
+              <li>Tạo data room sản phẩm tốt hơn cho vòng gọi vốn tiếp theo.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Roadmap</div>
+            <h2>Lộ trình 12 tháng đề xuất</h2>
+          </div>
+          <p>Lộ trình này được viết ở mức chiến lược để phù hợp cho investor deck; có thể tinh chỉnh theo mục tiêu vòng gọi vốn.</p>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item">
+            <strong>Q1</strong>
+            <div>
+              <h3>Hoàn thiện MVP vận hành được</h3>
+              <p>Tập trung bridge, swap, send, unified balance, transaction history, wallet UX và lớp admin cho cấu hình cốt lõi.</p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <strong>Q2</strong>
+            <div>
+              <h3>Đo lường và tối ưu retention</h3>
+              <p>Triển khai đo conversion funnel, sửa friction points, nâng mức hoàn tất giao dịch và cải thiện trust signal trong sản phẩm.</p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <strong>Q3</strong>
+            <div>
+              <h3>Mở rộng use case tạo doanh thu</h3>
+              <p>Thử nghiệm fee layer, partnership trong hệ sinh thái và các lớp sản phẩm giá trị gia tăng dựa trên dữ liệu sử dụng thật.</p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <strong>Q4</strong>
+            <div>
+              <h3>Mở rộng theo tín hiệu thị trường</h3>
+              <p>Quyết định mở thêm chain, mở thêm module hoặc đi sâu vào một vertical mạnh nhất dựa trên hành vi người dùng và economics.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="label">Call To Action</div>
+            <h2>Điều nhà đầu tư đang mua vào</h2>
+          </div>
+          <p>Không chỉ là một ứng dụng DeFi khác, mà là một thesis rõ ràng về cách Arc có thể tiếp cận người dùng phổ thông qua lớp sản phẩm đúng.</p>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Luận điểm chính</h3>
+            <p>Arc Quantum muốn trở thành giao diện tài sản số mặc định cho nhóm người dùng cần sự đơn giản, tốc độ và minh bạch khi tương tác với Arc Network.</p>
+          </article>
+          <article class="card">
+            <h3>Lý do để tham gia sớm</h3>
+            <p>Dự án đang ở giai đoạn mà vốn chiến lược có thể tác động trực tiếp đến chất lượng sản phẩm, tốc độ học thị trường và khả năng chiếm vị trí entry-point trong hệ sinh thái.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="cta-card">
+        <div>
+          <div class="label">Next Step</div>
+          <h3>Đề xuất dùng bản này như investor one-pager mở rộng hoặc deck landing page.</h3>
+          <p>
+            Trước khi gửi chính thức, nên cập nhật thêm các dữ liệu đã kiểm chứng như team, demo link, traction, pipeline đối tác hoặc nhu cầu gọi vốn cụ thể để tăng sức thuyết phục. Bản hiện tại đã được viết để <span class="accent">không thổi phồng số liệu</span> nhưng vẫn giữ giọng điệu gọi vốn rõ ràng.
+          </p>
+        </div>
+        <a class="button" href="mailto:founder@arcquantum.example">Liên hệ nhà sáng lập</a>
+      </section>
+
+      <p class="footer-note">
+        Gợi ý chỉnh sửa trước khi gửi: thay email placeholder, thêm logo chính thức, chèn link demo, và nếu có dữ liệu thật thì bổ sung traction hoặc mức gọi vốn mục tiêu tại phần hero hoặc call to action.
+      </p>
+    </main>
+  </div>
+</body>
+</html>
